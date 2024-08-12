@@ -29,87 +29,101 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import org.lotka.xenonx.domain.model.Post
 import org.lotka.xenonx.presentation.R
 import org.lotka.xenonx.presentation.theme.HintGray
 import org.lotka.xenonx.presentation.theme.MediumGray
 import org.lotka.xenonx.presentation.theme.TextGray
+import org.lotka.xenonx.presentation.theme.TextWhite
 import org.lotka.xenonx.presentation.util.Constants.MAX_DESCRIPTION_LINE
 import org.lotka.xenonx.presentation.util.Dimension.SpaceMedium
+import org.lotka.xenonx.presentation.util.Dimension.SpaceSmall
 
 @Composable
 fun PostItem(
     post: Post,
-    profilePictureSize: Dp = 50.dp
+    profilePictureSize: Dp = 75.dp
 ) {
 
     val context = LocalContext.current
 
-    Box(modifier = Modifier.fillMaxWidth()
-        .shadow(5.dp).padding(SpaceMedium)
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .padding(SpaceMedium)
     ) {
 
         Column(modifier = Modifier
             .fillMaxWidth()
             .offset(y = profilePictureSize / 2f)
             .clip(shape = MaterialTheme.shapes.medium)
+            .shadow(elevation = 5.dp)
             .background(MediumGray)
-
         ) {
             Image(
                 painter = painterResource(id = R.drawable.post),
                 contentDescription = "profile image",
 
             )
-            Spacer(modifier = Modifier.height(SpaceMedium))
+            Column(modifier = Modifier
+                .fillMaxWidth()
+               .padding(SpaceMedium)
+            ) {
+                ActionRow(
+                     modifier = Modifier.fillMaxWidth(),
+                     userName = "Arman Sherwamii",
+                     onLikeClicked = { isLiked ->
 
-            ActionRow(userName = "Arman Sherwamii"
-            , modifier = Modifier.fillMaxWidth(),
-                onLikeClicked = { isLiked ->
+                    },
+                    onCommentClicked = {
 
-                },
-                onCommentClicked = {
+                    },
+                    onShareClicked = {
 
-                },
-                onShareClicked = {
+                    },
+                    onUserNameClicked = {userName ->
 
-                },
-                onUserNameClicked = {userName ->
-
-                }
-            )
-            Text(
-                text = buildAnnotatedString {
-                    append(text = post.description)
-                    withStyle(
-                        SpanStyle(
-                            color = HintGray
-                        )
-                    ) {
-                        append((stringResource(R.string.read_more)))
                     }
-                },
-                style = MaterialTheme.typography.body2,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = MAX_DESCRIPTION_LINE,
                 )
-
-            Row (modifier = Modifier.fillMaxWidth()
-            , horizontalArrangement = Arrangement.SpaceBetween
-            ){
-
-
                 Text(
-                    text = stringResource(R.string.liked_by_x_people,post.likes)
-                    , style = MaterialTheme.typography.body2
-                    , color = TextGray
+                    text = buildAnnotatedString {
+                        append(text = post.description)
+                        withStyle(
+                            SpanStyle(
+                                color = HintGray
+                            )
+                        ) {
+                            append(context.getString(R.string.read_more))
+                        }
+                    },
+                    style = MaterialTheme.typography.body2,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = MAX_DESCRIPTION_LINE,
                 )
 
-                Text(
-                    text = stringResource(R.string.comment)
-                    , style = MaterialTheme.typography.body2
-                    , color = TextGray
-                )
+                Spacer(modifier = Modifier.height(SpaceMedium))
+                
+                Row (modifier = Modifier.fillMaxWidth()
+                    , horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ){
+
+
+                    Text(
+                        text = stringResource(R.string.liked_by_x_people,post.likes)
+                        , style = MaterialTheme.typography.body2
+                        , color = TextWhite,
+                        fontSize = 16.sp
+                    )
+
+                    Text(
+                        text = stringResource(R.string.comment ,post.comments)
+                        , style = MaterialTheme.typography.body2
+                        , color = TextWhite,
+                          fontSize = 16.sp
+                    )
+                }
+
             }
 
         }
@@ -117,9 +131,10 @@ fun PostItem(
         Image(
             painter = painterResource(id = R.drawable.arman),
             contentDescription = "profile image",
-            modifier = Modifier.clip(CircleShape)
-                .size(profilePictureSize),
-            alignment = Alignment.TopCenter
+            modifier = Modifier
+                .size(profilePictureSize)
+                .clip(CircleShape)
+                .align(Alignment.TopCenter)
         )
 
     }}

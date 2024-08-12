@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -24,39 +25,25 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.lotka.xenonx.presentation.R
 import org.lotka.xenonx.presentation.theme.TextWhite
+import org.lotka.xenonx.presentation.util.Dimension.SpaceMedium
 import org.lotka.xenonx.presentation.util.Dimension.SpaceSmall
 
 
 @Composable
-fun ActionRow(
+fun PostButtonRow(
     modifier: Modifier = Modifier,
     isLiked: Boolean = false,
     onLikeClicked: (Boolean) -> Unit = {},
     onCommentClicked: () -> Unit = {},
-    iconSize: Dp = 20.dp,
+    iconSize: Dp = 30.dp,
     onShareClicked: () -> Unit = {},
-    onUserNameClicked: (String) -> Unit = {},
-    userName: String = ""
 ) {
 
     Row(
-        horizontalArrangement = Arrangement.SpaceAround, modifier = modifier
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceAround,
+        modifier = modifier
     ) {
-
-        TextButton(
-            onClick = {
-                onUserNameClicked(userName)
-            },
-            modifier = Modifier.weight(1f)
-        ) {
-            Text(
-                text = userName, style = MaterialTheme.typography.body1,
-                color = MaterialTheme.colors.primary,
-                fontWeight = FontWeight.Bold
-            )
-
-        }
-
 
         //Like
         IconButton(onClick = {
@@ -74,7 +61,7 @@ fun ActionRow(
             )
 
         }
-        Spacer(modifier = Modifier.width(SpaceSmall))
+        Spacer(modifier = Modifier.width(SpaceMedium))
         //Comment
         IconButton(onClick = {
             onCommentClicked()
@@ -86,7 +73,7 @@ fun ActionRow(
             )
 
         }
-        Spacer(modifier = Modifier.width(SpaceSmall))
+        Spacer(modifier = Modifier.width(SpaceMedium))
 
         //Share
         IconButton(onClick = {
@@ -103,4 +90,40 @@ fun ActionRow(
 
     }
 
+}
+@Composable
+fun ActionRow (
+    modifier: Modifier = Modifier,
+    isLiked: Boolean = false,
+    onLikeClicked: (Boolean) -> Unit = {},
+    onCommentClicked: () -> Unit = {},
+    onShareClicked: () -> Unit = {},
+    onUserNameClicked: (String) -> Unit = {},
+    userName: String = ""
+){
+    Row (
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier,
+        ) {
+        TextButton(
+            onClick = {
+                onUserNameClicked(userName)
+            },
+
+        ) {
+            Text(
+                text = userName, style = MaterialTheme.typography.body1,
+                color = MaterialTheme.colors.primary,
+                fontWeight = FontWeight.Bold
+            )
+
+        }
+        PostButtonRow(
+            isLiked = isLiked,
+            onLikeClicked = onLikeClicked,
+            onCommentClicked = onCommentClicked,
+            onShareClicked = onShareClicked,
+        )
+    }
 }

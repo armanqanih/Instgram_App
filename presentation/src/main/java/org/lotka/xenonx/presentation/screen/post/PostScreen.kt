@@ -18,7 +18,7 @@ fun PostScreen(
                 "WorldHello WorldHello WorldWorldHello WorldHello World" +
                 "WorldHello WorldHello World",
         likes = 10,
-        comments = 5
+        comments = 7
 
         ))
 
