@@ -38,7 +38,7 @@ import org.lotka.xenonx.presentation.theme.TextGray
 import org.lotka.xenonx.presentation.theme.TextWhite
 import org.lotka.xenonx.presentation.util.Constants.MAX_DESCRIPTION_LINE
 import org.lotka.xenonx.presentation.util.Dimension.SpaceMedium
-import org.lotka.xenonx.presentation.util.Dimension.SpaceSmall
+
 
 @Composable
 fun PostItem(

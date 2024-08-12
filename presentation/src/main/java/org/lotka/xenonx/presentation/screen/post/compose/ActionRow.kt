@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import org.lotka.xenonx.presentation.R
 import org.lotka.xenonx.presentation.theme.TextWhite
 import org.lotka.xenonx.presentation.util.Dimension.SpaceMedium
-import org.lotka.xenonx.presentation.util.Dimension.SpaceSmall
+
 
 
 @Composable
