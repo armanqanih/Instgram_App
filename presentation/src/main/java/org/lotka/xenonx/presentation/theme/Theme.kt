@@ -6,15 +6,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 private val DarkColorPalette = darkColors(
-    primary = Color.White,
+    primary = GreenAccent,
     background = DarkGray,
     onBackground = Color.White,
-    surface = LightBlue,
-    onSurface = DarkGray
+    onPrimary = DarkGray,
+    surface = MediumGray
+    , onSurface = LightGray
 )
 
 @Composable
-fun CleanArchitectureNoteAppTheme(darkTheme: Boolean = true, content: @Composable() () -> Unit) {
+fun CleanArchitectureNoteAppTheme( content: @Composable() () -> Unit) {
     MaterialTheme(
         colors = DarkColorPalette,
         typography = Typography,
