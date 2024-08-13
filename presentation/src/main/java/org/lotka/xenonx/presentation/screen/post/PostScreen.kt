@@ -1,7 +1,9 @@
 package org.lotka.xenonx.presentation.screen.post
 
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 
 import androidx.navigation.NavController
 import org.lotka.xenonx.domain.model.Post
@@ -12,7 +14,6 @@ import org.lotka.xenonx.presentation.screen.post.compose.PostItem
 fun PostScreen(
     navController: NavController,
 ){
-    StandardScaffold(){
         PostItem(
             post = Post(
                 id = 1,
@@ -28,4 +29,3 @@ fun PostScreen(
 
     }
 
-}

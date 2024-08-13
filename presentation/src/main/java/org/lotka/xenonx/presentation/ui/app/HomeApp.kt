@@ -1,23 +1,26 @@
 package org.lotka.xenonx.presentation.ui.app
 
 import android.annotation.SuppressLint
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.navArgument
 import com.google.accompanist.pager.ExperimentalPagerApi
+import org.lotka.xenonx.presentation.composable.StandardScaffold
+import org.lotka.xenonx.presentation.screen.activity.ActivityScreen
+import org.lotka.xenonx.presentation.screen.profile.ProfileScreen
+import org.lotka.xenonx.presentation.screen.chat.ChatScreen
 import org.lotka.xenonx.presentation.screen.home.HomeScreen
 import org.lotka.xenonx.presentation.screen.login.LoginScreen
 import org.lotka.xenonx.presentation.screen.post.PostScreen
@@ -44,61 +47,82 @@ fun HomeApp(
 
     ) {
 
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
-    val scaffoldState = rememberScaffoldState()
 
-
-
-
-    Scaffold(
-        content = { _ ->
-            NavHost(
-                navController = navController,
-                startDestination = ScreensNavigation.SplashScreen.route
-            ) {
-                composable(route = ScreensNavigation.SplashScreen.route,
+        Scaffold(
+            content = { _ ->
+                NavHost(
+                    navController = navController,
+                    startDestination = ScreensNavigation.SplashScreen.route
                 ) {
+                    composable(
+                        route = ScreensNavigation.SplashScreen.route,
+                    ) {
 
-                    SplashScreen(navController = navController)
+                        SplashScreen(navController = navController)
+
+                    }
+                    composable(
+                        route = ScreensNavigation.LoginScreen.route,
+                    ) {
+
+                        LoginScreen(navController = navController)
+
+                    }
+                    composable(
+                        route = ScreensNavigation.RegisterScreen.route,
+                    ) {
+
+                        RegisterScreen(navController = navController)
+
+                    }
+                    composable(
+                        route = ScreensNavigation.ChatScreen.route,
+                    ) {
+
+                        HomeScreen()
+
+                    }
+                    composable(
+                        route = ScreensNavigation.PostScreen.route,
+                    ) {
+
+                        PostScreen(navController = navController)
+
+                    }
+                    composable(
+                        route = ScreensNavigation.PostScreen.route,
+                    ) {
+
+                        PostScreen(navController = navController)
+
+                    }
+                    composable(
+                        route = ScreensNavigation.ChatScreen.route,
+                    ) {
+
+                        ChatScreen(navController = navController)
+
+                    }
+                    composable(
+                        route = ScreensNavigation.ActivityScreen.route,
+                    ) {
+                        ActivityScreen(navController = navController)
+                    }
+
+                    composable(
+                        route = ScreensNavigation.ProfileScreen.route,
+                    ) {
+                        ProfileScreen(navController = navController)
+                    }
+
 
                 }
-                composable(
-                    route = ScreensNavigation.LoginScreen.route,
-                ) {
 
-                    LoginScreen(navController = navController)
+            },
+        )
 
-                }
-                composable(
-                    route = ScreensNavigation.RegisterScreen.route,
-                ) {
+    }
 
-                    RegisterScreen(navController = navController)
-
-                }
-                composable(
-                    route = ScreensNavigation.ChatScreen.route,
-                ) {
-
-                    HomeScreen()
-
-                }
-                composable(
-                    route = ScreensNavigation.PostScreen.route,
-                ) {
-
-                    PostScreen(navController = navController)
-
-                }
-
-
-            }
-
-        },
-    )
-
-}
 
 
 
