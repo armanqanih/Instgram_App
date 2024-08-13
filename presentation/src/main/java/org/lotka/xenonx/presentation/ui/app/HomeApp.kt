@@ -21,6 +21,7 @@ import org.lotka.xenonx.presentation.composable.StandardScaffold
 import org.lotka.xenonx.presentation.screen.activity.ActivityScreen
 import org.lotka.xenonx.presentation.screen.profile.ProfileScreen
 import org.lotka.xenonx.presentation.screen.chat.ChatScreen
+import org.lotka.xenonx.presentation.screen.create_post.CreatePostScreen
 import org.lotka.xenonx.presentation.screen.home.HomeScreen
 import org.lotka.xenonx.presentation.screen.login.LoginScreen
 import org.lotka.xenonx.presentation.screen.post.PostScreen
@@ -113,6 +114,11 @@ fun HomeApp(
                         route = ScreensNavigation.ProfileScreen.route,
                     ) {
                         ProfileScreen(navController = navController)
+                    }
+                    composable(
+                        route = ScreensNavigation.CreatePostScreen.route,
+                    ) {
+                        CreatePostScreen(navController = navController)
                     }
 
 

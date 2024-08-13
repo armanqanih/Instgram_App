@@ -48,6 +48,9 @@ class HomeActivity : AppCompatActivity() {
                             ScreensNavigation.ProfileScreen.route
                         ),
                         modifier = Modifier.fillMaxSize(),
+                        onFabClick = {
+                            navController.navigate(ScreensNavigation.CreatePostScreen.route)
+                        }
                     ) {
                         HomeApp(
                             activity = this@HomeActivity,

@@ -21,5 +21,8 @@
     <string name="liked_by_x_people">liked by %d people</string>
     <string name="home">Home</string>
     <string name="chat">Chat</string>
+    <string name="add_post">Add Post</string>
+    <string name="notifications">notifications</string>
+    <string name="profile">profile</string>
 
 </resources>

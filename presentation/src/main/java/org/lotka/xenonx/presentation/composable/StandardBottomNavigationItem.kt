@@ -1,6 +1,8 @@
 package org.lotka.xenonx.presentation.composable
 
 import android.text.style.LineBackgroundSpan.Standard
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
@@ -35,7 +37,7 @@ import org.lotka.xenonx.presentation.theme.HintGray
 @Composable
 fun RowScope.StandardBottomNavigationItem(
     modifier: Modifier = Modifier,
-    icon: ImageVector,
+    icon: ImageVector? = null,
     contentDescription: String? = null,
     alertCount: Int? = null,
     selectedColor: Color = MaterialTheme.colors.primary,
@@ -49,6 +51,13 @@ fun RowScope.StandardBottomNavigationItem(
     alertCount?.let {
     require(alertCount >= 0)
     }
+
+    val lineLenght = animateFloatAsState(
+        targetValue = if (selected) 1f else 0f,
+        animationSpec = tween(
+            durationMillis = 300
+        )
+        )
 
     BottomNavigationItem(
         selected = selected,
@@ -67,10 +76,13 @@ fun RowScope.StandardBottomNavigationItem(
                             color = if (selected) selectedColor
                             else unselectedColor,
                             start = Offset(
-                                size.width /2 -15.dp.toPx(),
-                                size.height),
-                            end = Offset(size.width /2 +15.dp.toPx(),
-                                size.height),
+                                size.width / 2 - lineLenght.value * 15.dp.toPx(),
+                                size.height
+                            ),
+                            end = Offset(
+                                size.width /2 +  lineLenght.value *  15.dp.toPx(),
+                                size.height
+                            ),
                             strokeWidth = 2.dp.toPx(),
                             cap = StrokeCap.Round
                         )
@@ -79,14 +91,17 @@ fun RowScope.StandardBottomNavigationItem(
 
                 }
             ) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = contentDescription,
-                    modifier = Modifier.
-                    align(Alignment.Center),
-                    tint =  if (selected) selectedColor else unselectedColor
+                if (icon != null) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = contentDescription,
+                        modifier = Modifier.
+                        align(Alignment.Center),
+                        tint =  if (selected) selectedColor else unselectedColor
 
-                )
+                    )
+                }
+
                 if (alertCount != null) {
                     val alertText = if (alertCount > 99) {
                         "99+"
@@ -101,11 +116,11 @@ fun RowScope.StandardBottomNavigationItem(
                         fontWeight = FontWeight.Bold,
                         fontSize = 10.sp,
                         modifier = Modifier
-                                .align(Alignment.TopCenter)
-                                .offset(10.dp)
-                                .size(15.dp)
-                                .clip(CircleShape)
-                                .background(color = MaterialTheme.colors.primary)
+                            .align(Alignment.TopCenter)
+                            .offset(10.dp)
+                            .size(15.dp)
+                            .clip(CircleShape)
+                            .background(color = MaterialTheme.colors.primary)
                     )
 
 
