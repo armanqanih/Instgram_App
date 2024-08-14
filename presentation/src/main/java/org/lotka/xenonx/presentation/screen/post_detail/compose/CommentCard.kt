@@ -20,17 +20,15 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import org.lotka.xenonx.domain.model.Comment
+import org.lotka.xenonx.domain.model.CommentModel
 import org.lotka.xenonx.presentation.R
 
 import org.lotka.xenonx.presentation.util.Dimension.SpaceMedium
@@ -42,7 +40,7 @@ import org.lotka.xenonx.presentation.util.Dimension.profilePictureSmallSize
 fun CommentCard(
     modifier: Modifier = Modifier,
     onLikeClicked: (Boolean) -> Unit = {},
-    comment: Comment = Comment()
+    commentModel: CommentModel = CommentModel()
 ) {
 
    Card(modifier = modifier,
@@ -70,7 +68,7 @@ fun CommentCard(
 
                    Spacer(modifier = Modifier.width(SpaceSmall))
 
-                   Text(text = comment.userName,
+                   Text(text = commentModel.userName,
                        fontWeight = FontWeight.Bold,
                        color = MaterialTheme.colors.onBackground,
                        style = MaterialTheme.typography.body2,
@@ -90,7 +88,7 @@ fun CommentCard(
                horizontalArrangement = Arrangement.SpaceBetween,
                modifier = Modifier.fillMaxWidth()
                ) {
-               Text(text = comment.comment,
+               Text(text = commentModel.comment,
                    color = MaterialTheme.colors.onBackground,
                    style = MaterialTheme.typography.body2,
                    modifier = Modifier.weight(9f)
@@ -98,10 +96,10 @@ fun CommentCard(
 
 
                IconButton(onClick = {
-                   onLikeClicked(comment.isLiked)
+                   onLikeClicked(commentModel.isLiked)
                }) {
                  Icon(imageVector = Icons.Outlined.Favorite,
-                     tint = if (comment.isLiked) Color.White else Color.Red,
+                     tint = if (commentModel.isLiked) Color.White else Color.Red,
                      contentDescription = "like",
                      modifier = Modifier.weight(1f)
                      )
@@ -109,7 +107,7 @@ fun CommentCard(
            }
 
            Text(
-               text = stringResource(R.string.liked_by_x_people, comment.likeCount),
+               text = stringResource(R.string.liked_by_x_people, commentModel.likeCount),
                style = MaterialTheme.typography.body2,
                fontWeight = FontWeight.Bold,
            )

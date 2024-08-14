@@ -3,6 +3,6 @@ package org.lotka.xenonx.domain.util
 sealed class ActivityAction {
 
     object LikePost : ActivityAction()
-    object CommentPost : ActivityAction()
+    object CommentedOnPost : ActivityAction()
 
 }

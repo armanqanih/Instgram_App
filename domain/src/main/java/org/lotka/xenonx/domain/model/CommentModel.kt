@@ -1,6 +1,6 @@
 package org.lotka.xenonx.domain.model
 
-data class Comment(
+data class CommentModel(
     val commentId: Int = -1,
     val userName: String = "",
     val profilePictureUrl: String = "",

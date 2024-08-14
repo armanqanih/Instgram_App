@@ -27,5 +27,11 @@
     <string name="arrowback">ArrowBack</string>
     <string name="your_feed">Your Feed</string>
     <string name="your__feed">Your Feed</string>
+    <string name="Liked">Liked</string>
+    <string name="comment_on">Comment On</string>
+    <string name="your_post">Your Post</string>
+    <string name="your_activity">Your Activity</string>
+    <string name="you_profile">You Profile</string>
+    <string name="banner_image">banner image</string>
 
 </resources>

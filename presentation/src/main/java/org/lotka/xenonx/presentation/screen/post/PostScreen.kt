@@ -9,16 +9,14 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 
 import androidx.navigation.NavController
-import org.lotka.xenonx.domain.model.Post
+import org.lotka.xenonx.domain.model.PostModel
 import org.lotka.xenonx.presentation.R
 
 import org.lotka.xenonx.presentation.composable.StandardToolBar
@@ -58,7 +56,7 @@ fun PostScreen(
 
 
         PostItem(
-            post = Post(
+            postModel = PostModel(
                 id = 1,
                 userName = "Arman Sherwamii",
                 profileImage = "",

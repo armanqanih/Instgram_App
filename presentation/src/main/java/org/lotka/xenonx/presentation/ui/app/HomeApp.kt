@@ -2,23 +2,16 @@ package org.lotka.xenonx.presentation.ui.app
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.pager.ExperimentalPagerApi
-import org.lotka.xenonx.domain.model.Post
-import org.lotka.xenonx.presentation.composable.StandardScaffold
+import org.lotka.xenonx.domain.model.PostModel
 import org.lotka.xenonx.presentation.screen.activity.ActivityScreen
 import org.lotka.xenonx.presentation.screen.profile.ProfileScreen
 import org.lotka.xenonx.presentation.screen.chat.ChatScreen
@@ -126,7 +119,7 @@ fun HomeApp(
                         route = ScreensNavigation.PostDetailScreen.route,
                     ) {
                         PostDetailScreen(navController = navController,
-                            post = Post(
+                            postModel = PostModel(
                                 id = 1,
                                 userName = "Arman Sherwamii",
                                 profileImage = "",

@@ -28,14 +28,12 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.lotka.xenonx.domain.model.Post
+import org.lotka.xenonx.domain.model.PostModel
 import org.lotka.xenonx.presentation.R
 import org.lotka.xenonx.presentation.theme.HintGray
 import org.lotka.xenonx.presentation.theme.MediumGray
-import org.lotka.xenonx.presentation.theme.TextGray
 import org.lotka.xenonx.presentation.theme.TextWhite
 import org.lotka.xenonx.presentation.util.Constants.MAX_DESCRIPTION_LINE
 import org.lotka.xenonx.presentation.util.Dimension.SpaceMedium
@@ -45,7 +43,7 @@ import org.lotka.xenonx.presentation.util.Dimension.profilePictureSize
 
 @Composable
 fun PostItem(
-    post: Post,
+    postModel: PostModel,
     onPostClick: () -> Unit ={},
 ) {
 
@@ -97,7 +95,7 @@ fun PostItem(
                 Text(
                     modifier = Modifier.padding(start = SpaceSmall),
                     text = buildAnnotatedString {
-                        append(text = post.description)
+                        append(text = postModel.description)
                         withStyle(
                             SpanStyle(
                                 color = HintGray
@@ -121,7 +119,7 @@ fun PostItem(
 
 
                     Text(
-                        text = stringResource(R.string.liked_by_x_people,post.likes)
+                        text = stringResource(R.string.liked_by_x_people,postModel.likes)
                         , style = MaterialTheme.typography.body2
                         , color = TextWhite,
                         fontSize = 16.sp
@@ -130,7 +128,7 @@ fun PostItem(
                     )
 
                     Text(
-                        text = stringResource(R.string.comment ,post.comments)
+                        text = stringResource(R.string.comment ,postModel.comments)
                         , style = MaterialTheme.typography.body2
                         , color = TextWhite,
                           fontSize = 16.sp
