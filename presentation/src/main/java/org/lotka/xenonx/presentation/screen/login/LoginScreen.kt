@@ -104,7 +104,7 @@ fun LoginScreen(
                         viewModel.onEvent(LoginEvent.EnterUserName(it))
                     },
                     singleLine = true,
-                    keyboardType = KeyboardType.Text,
+                    keyboardType = KeyboardType.Email,
                     error = state.userNameError,
                 )
                 Spacer(modifier = Modifier.height(SpaceMedium))

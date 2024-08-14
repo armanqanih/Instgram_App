@@ -11,6 +11,7 @@ sealed class ScreensNavigation(val route: String) {
     object ProfileScreen : ScreensNavigation(route = "profile_screen")
     object EditProfileScreen : ScreensNavigation(route = "edit_profile_screen")
     object PersonListScreen : ScreensNavigation(route = "person_list_screen")
+    object MessageScreen : ScreensNavigation(route = "person_list_screen")
     object CreatePostScreen : ScreensNavigation(route = "create_post_screen")
     object SearchScreen : ScreensNavigation(route = "search_screen")
     object ActivityScreen : ScreensNavigation(route = "activity_screen")

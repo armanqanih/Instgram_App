@@ -71,7 +71,7 @@ fun RowScope.StandardBottomNavigationItem(
                 .fillMaxSize()
                 .padding(8.dp)
                 .drawBehind {
-                    if (selected) {
+                    if (lineLenght.value > 0) {
                         drawLine(
                             color = if (selected) selectedColor
                             else unselectedColor,
@@ -108,7 +108,6 @@ fun RowScope.StandardBottomNavigationItem(
                     } else {
                         alertCount.toString()
                     }
-
                     Text(
                         text = alertText,
                         color = MaterialTheme.colors.onPrimary,

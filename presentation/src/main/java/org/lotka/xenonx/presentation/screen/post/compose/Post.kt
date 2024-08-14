@@ -2,6 +2,7 @@ package org.lotka.xenonx.presentation.screen.post.compose
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,12 +39,14 @@ import org.lotka.xenonx.presentation.theme.TextGray
 import org.lotka.xenonx.presentation.theme.TextWhite
 import org.lotka.xenonx.presentation.util.Constants.MAX_DESCRIPTION_LINE
 import org.lotka.xenonx.presentation.util.Dimension.SpaceMedium
+import org.lotka.xenonx.presentation.util.Dimension.SpaceSmall
+import org.lotka.xenonx.presentation.util.Dimension.profilePictureSize
 
 
 @Composable
 fun PostItem(
     post: Post,
-    profilePictureSize: Dp = 75.dp
+    onPostClick: () -> Unit ={},
 ) {
 
     val context = LocalContext.current
@@ -59,15 +62,21 @@ fun PostItem(
             .clip(shape = MaterialTheme.shapes.medium)
             .shadow(elevation = 5.dp)
             .background(MediumGray)
+
         ) {
             Image(
                 painter = painterResource(id = R.drawable.post),
                 contentDescription = "profile image",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        onPostClick()
+                    }
 
             )
             Column(modifier = Modifier
                 .fillMaxWidth()
-               .padding(SpaceMedium)
+               .padding(SpaceSmall)
             ) {
                 ActionRow(
                      modifier = Modifier.fillMaxWidth(),
@@ -86,6 +95,7 @@ fun PostItem(
                     }
                 )
                 Text(
+                    modifier = Modifier.padding(start = SpaceSmall),
                     text = buildAnnotatedString {
                         append(text = post.description)
                         withStyle(
@@ -99,6 +109,7 @@ fun PostItem(
                     style = MaterialTheme.typography.body2,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = MAX_DESCRIPTION_LINE,
+
                 )
 
                 Spacer(modifier = Modifier.height(SpaceMedium))
@@ -114,6 +125,8 @@ fun PostItem(
                         , style = MaterialTheme.typography.body2
                         , color = TextWhite,
                         fontSize = 16.sp
+                        ,modifier = Modifier.padding(start =SpaceSmall)
+
                     )
 
                     Text(

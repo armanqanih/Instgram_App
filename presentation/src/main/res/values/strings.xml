@@ -24,5 +24,8 @@
     <string name="add_post">Add Post</string>
     <string name="notifications">notifications</string>
     <string name="profile">profile</string>
+    <string name="arrowback">ArrowBack</string>
+    <string name="your_feed">Your Feed</string>
+    <string name="your__feed">Your Feed</string>
 
 </resources>

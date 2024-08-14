@@ -37,14 +37,13 @@ fun StandardTextField(
     error: String = "",
     onValueChange: (String) -> Unit,
     keyboardType: KeyboardType = KeyboardType.Text,
+    isPasswordToggleDirection : Boolean = keyboardType == KeyboardType.Password,
     singleLine : Boolean = true ,
     showPasswordToggle: Boolean = false,
     onPasswordToggleClick: (Boolean) -> Unit = {}
 ) {
 
-    var isPasswordToggleDirection by remember {
-        mutableStateOf(keyboardType == KeyboardType.Password)
-    }
+
 
     Column(modifier = Modifier.fillMaxWidth()) {
     TextField(

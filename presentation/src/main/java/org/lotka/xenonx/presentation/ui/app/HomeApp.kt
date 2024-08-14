@@ -17,6 +17,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.pager.ExperimentalPagerApi
+import org.lotka.xenonx.domain.model.Post
 import org.lotka.xenonx.presentation.composable.StandardScaffold
 import org.lotka.xenonx.presentation.screen.activity.ActivityScreen
 import org.lotka.xenonx.presentation.screen.profile.ProfileScreen
@@ -25,6 +26,7 @@ import org.lotka.xenonx.presentation.screen.create_post.CreatePostScreen
 import org.lotka.xenonx.presentation.screen.home.HomeScreen
 import org.lotka.xenonx.presentation.screen.login.LoginScreen
 import org.lotka.xenonx.presentation.screen.post.PostScreen
+import org.lotka.xenonx.presentation.screen.post_detail.PostDetailScreen
 import org.lotka.xenonx.presentation.screen.register.RegisterScreen
 import org.lotka.xenonx.presentation.screen.splash.SplashScreen
 
@@ -119,6 +121,21 @@ fun HomeApp(
                         route = ScreensNavigation.CreatePostScreen.route,
                     ) {
                         CreatePostScreen(navController = navController)
+                    }
+                    composable(
+                        route = ScreensNavigation.PostDetailScreen.route,
+                    ) {
+                        PostDetailScreen(navController = navController,
+                            post = Post(
+                                id = 1,
+                                userName = "Arman Sherwamii",
+                                profileImage = "",
+                                postImage = "",
+                                description = "ahahaha",
+                                likes = 17,
+                                comments = 7
+                            )
+                        )
                     }
 
 
