@@ -55,8 +55,8 @@ fun ProfileStats(
             Spacer(modifier = Modifier.width(SpaceMedium))
             Button(onClick = { onFlowClick() }
                 , colors = ButtonDefaults.buttonColors(
-                    backgroundColor = if(isFollowing) MaterialTheme.colors.primary
-                    else LightGray
+                    backgroundColor = if(isFollowing) LightGray
+                    else MaterialTheme.colors.primary
                 ),
 
                 ) {

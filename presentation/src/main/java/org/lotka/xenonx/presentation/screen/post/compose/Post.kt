@@ -44,6 +44,7 @@ import org.lotka.xenonx.presentation.util.Dimension.profilePictureSizeMedium
 @Composable
 fun PostItem(
     postModel: PostModel,
+    modifier: Modifier = Modifier ,
     showProfileImage : Boolean = true,
     onPostClick: () -> Unit ={},
 ) {
