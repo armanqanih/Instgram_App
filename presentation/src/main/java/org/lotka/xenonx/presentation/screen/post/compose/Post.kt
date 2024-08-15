@@ -44,6 +44,7 @@ import org.lotka.xenonx.presentation.util.Dimension.profilePictureSizeMedium
 @Composable
 fun PostItem(
     postModel: PostModel,
+    showProfileImage : Boolean = true,
     onPostClick: () -> Unit ={},
 ) {
 
@@ -56,7 +57,7 @@ fun PostItem(
 
         Column(modifier = Modifier
             .fillMaxWidth()
-            .offset(y = profilePictureSizeMedium / 2f)
+            .offset(y = if (showProfileImage) profilePictureSizeMedium / 2f else 0.dp)
             .clip(shape = MaterialTheme.shapes.medium)
             .shadow(elevation = 5.dp)
             .background(MediumGray)
@@ -138,15 +139,17 @@ fun PostItem(
             }
 
         }
+   if (showProfileImage){
+       Image(
+           painter = painterResource(id = R.drawable.arman),
+           contentDescription = "profile image",
+           modifier = Modifier
+               .size(profilePictureSizeMedium)
+               .clip(CircleShape)
+               .align(Alignment.TopCenter)
+       )
+   }
 
-        Image(
-            painter = painterResource(id = R.drawable.arman),
-            contentDescription = "profile image",
-            modifier = Modifier
-                .size(profilePictureSizeMedium)
-                .clip(CircleShape)
-                .align(Alignment.TopCenter)
-        )
 
     }}
 

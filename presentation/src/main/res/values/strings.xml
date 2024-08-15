@@ -38,5 +38,10 @@
     <string name="github">GitHub</string>
     <string name="linkedin">LinkedIn</string>
     <string name="edit_icon">Edit Icon</string>
+    <string name="follower">Follower</string>
+    <string name="following">Following</string>
+    <string name="posts">Posts</string>
+    <string name="unfollow">unfollow</string>
+    <string name="follow">follow</string>
 
 </resources>

@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
@@ -43,7 +44,8 @@ fun BannerSeaction(
         Image(painter = painterResource(id = R.drawable.newbanner) ,
             contentDescription = stringResource(R.string.banner_image),
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize(),
+            contentScale = ContentScale.Crop
         )
 
         Box(modifier = Modifier.fillMaxSize()

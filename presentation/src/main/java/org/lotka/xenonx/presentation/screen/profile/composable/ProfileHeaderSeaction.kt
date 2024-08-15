@@ -31,12 +31,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.lotka.xenonx.domain.model.UserModel
 import org.lotka.xenonx.presentation.R
+import org.lotka.xenonx.presentation.util.Dimension.SpaceLarge
+import org.lotka.xenonx.presentation.util.Dimension.SpaceMedium
 import org.lotka.xenonx.presentation.util.Dimension.SpaceSmall
 import org.lotka.xenonx.presentation.util.Dimension.profilePictureSizeLarge
 
 @Composable
 fun ProfileHeaderSection(
     modifier: Modifier = Modifier,
+    isOwnProfile : Boolean = true ,
     user: UserModel,
     onEditClick : () -> Unit = {}
 ){
@@ -67,26 +70,43 @@ fun ProfileHeaderSection(
 
         Row (
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.offset(x =  30.dp)
+            modifier = Modifier.offset(x =
+            if (isOwnProfile)
+            (30.dp + SpaceSmall) /2
+            else 0.dp
+            )
         ){
             Text(
                 text = user.userName,
                 style = MaterialTheme.typography.h1.copy(
-                    fontSize = 20.sp
+                    fontSize = 24.sp
                 ),
                 textAlign = TextAlign.Center
             )
-            
-            Spacer(modifier = Modifier.width(SpaceSmall))
+            if (isOwnProfile){
+                Spacer(modifier = Modifier.width(SpaceSmall))
 
-            IconButton(onClick = { onEditClick() },
-                modifier = Modifier.size(30.dp)
+
+                IconButton(onClick = { onEditClick() },
+                    modifier = Modifier.size(30.dp)
                 ) {
-                Icon(imageVector = Icons.Default.Edit,
-                    contentDescription = stringResource(R.string.edit_icon) )
+                    Icon(imageVector = Icons.Default.Edit,
+                        contentDescription = stringResource(R.string.edit_icon) )
+                }
             }
 
+
         }
+        Spacer(modifier = Modifier.height(SpaceMedium))
+        Text(
+            text = user.description,
+            style = MaterialTheme.typography.body2,
+            textAlign = TextAlign.Center
+
+        )
+        Spacer(modifier = Modifier.height(SpaceLarge))
+        ProfileStats(user = user)
+
 
     }
 
