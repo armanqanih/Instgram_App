@@ -33,5 +33,10 @@
     <string name="your_activity">Your Activity</string>
     <string name="you_profile">You Profile</string>
     <string name="banner_image">banner image</string>
+    <string name="c_sharp">csharp</string>
+    <string name="kotlin">Kotlin</string>
+    <string name="github">GitHub</string>
+    <string name="linkedin">LinkedIn</string>
+    <string name="edit_icon">Edit Icon</string>
 
 </resources>

@@ -41,7 +41,7 @@ fun SplashScreen(
 
         LaunchedEffect(key1 = true) {
             scale.animateTo(
-                targetValue = 0.4f,
+                targetValue = 2f,
                 animationSpec = tween(
                     durationMillis = 2000,
                     easing = {
@@ -55,7 +55,7 @@ fun SplashScreen(
         }
 
 
-        Image(painter = painterResource(id = R.drawable.profile1),
+        Image(painter = painterResource(id = R.drawable.instagram),
             contentDescription = "Logo" ,
             modifier = Modifier.scale(scale.value)
 

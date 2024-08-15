@@ -10,7 +10,8 @@ object Dimension {
     val SpaceToLarge = 30.dp
 
 
-    val profilePictureSize = 75.dp
+    val profilePictureSizeLarge = 100.dp
+    val profilePictureSizeMedium = 75.dp
     val profilePictureSmallSize = 30.dp
 
 }

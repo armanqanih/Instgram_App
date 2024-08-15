@@ -14,9 +14,9 @@
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/instagram"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher"
+        android:roundIcon="@drawable/instagram"
         android:supportsRtl="true"
         android:hardwareAccelerated="true"
         android:theme="@style/AppTheme"

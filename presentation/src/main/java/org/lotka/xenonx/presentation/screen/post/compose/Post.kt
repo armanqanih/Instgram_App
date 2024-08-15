@@ -38,7 +38,7 @@ import org.lotka.xenonx.presentation.theme.TextWhite
 import org.lotka.xenonx.presentation.util.Constants.MAX_DESCRIPTION_LINE
 import org.lotka.xenonx.presentation.util.Dimension.SpaceMedium
 import org.lotka.xenonx.presentation.util.Dimension.SpaceSmall
-import org.lotka.xenonx.presentation.util.Dimension.profilePictureSize
+import org.lotka.xenonx.presentation.util.Dimension.profilePictureSizeMedium
 
 
 @Composable
@@ -56,7 +56,7 @@ fun PostItem(
 
         Column(modifier = Modifier
             .fillMaxWidth()
-            .offset(y = profilePictureSize / 2f)
+            .offset(y = profilePictureSizeMedium / 2f)
             .clip(shape = MaterialTheme.shapes.medium)
             .shadow(elevation = 5.dp)
             .background(MediumGray)
@@ -143,7 +143,7 @@ fun PostItem(
             painter = painterResource(id = R.drawable.arman),
             contentDescription = "profile image",
             modifier = Modifier
-                .size(profilePictureSize)
+                .size(profilePictureSizeMedium)
                 .clip(CircleShape)
                 .align(Alignment.TopCenter)
         )

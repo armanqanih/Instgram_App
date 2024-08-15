@@ -4,6 +4,7 @@ package org.lotka.xenonx.presentation.screen.profile
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,13 +19,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import org.lotka.xenonx.domain.model.ActivityModel
+import org.lotka.xenonx.domain.model.UserModel
 import org.lotka.xenonx.domain.util.ActivityAction
 import org.lotka.xenonx.domain.util.DataFormater
 import org.lotka.xenonx.presentation.R
 import org.lotka.xenonx.presentation.composable.StandardToolBar
 import org.lotka.xenonx.presentation.screen.activity.compose.ActivityItem
+import org.lotka.xenonx.presentation.screen.profile.composable.BannerSeaction
+import org.lotka.xenonx.presentation.screen.profile.composable.ProfileHeaderSection
 import org.lotka.xenonx.presentation.util.Dimension.SpaceMedium
 import kotlin.random.Random
 
@@ -37,15 +42,16 @@ fun  ProfileScreen(
     Column(modifier = Modifier.fillMaxSize()) {
         StandardToolBar(
             navController = navController,
-            modifier = Modifier.fillMaxWidth(),
-            showBackArrow = false,
             title = {
                 Text(
                     text = stringResource(R.string.you_profile),
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colors.onBackground
+                    color = MaterialTheme.colors.onBackground,
+
                 )
             },
+            modifier = Modifier.fillMaxWidth(),
+            showBackArrow = false,
             navAction = {
              IconButton(onClick = {  }) {
                  Icon(imageVector = Icons.Default.Menu,
@@ -56,8 +62,30 @@ fun  ProfileScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-            , contentPadding = PaddingValues(SpaceMedium)
         ) {
+
+            item {
+                BannerSeaction(modifier = Modifier.height(160.dp)
+//                    .aspectRatio(2.5f)
+                )
+            }
+
+            item {
+                ProfileHeaderSection(
+                        user = UserModel(
+                        profilePictureUrl = "",
+                        userName = "ArmanSherwanii",
+                        description = "hellow my name is arman ," +
+                                "im a kotlin Developer "   ,
+                        followerCount = 1,
+                        followingCount = 250000
+                        , postCount = 12
+                    )
+
+                )
+            }
+
+
             items(20) {
 
 
