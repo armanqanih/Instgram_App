@@ -39,7 +39,8 @@ import org.lotka.xenonx.presentation.util.toPx
 @Composable
 fun BannerSeaction(
     modifier: Modifier = Modifier,
-    iconSize : Dp = 30.dp,
+    iconSize : Dp = 35.dp,
+    iconModifier: Modifier = Modifier ,
     onGithubClick : () ->Unit = {},
     onLinkedInClick : () ->Unit = {},
 ) {
@@ -68,7 +69,7 @@ fun BannerSeaction(
             )
 
             Row (
-                modifier = Modifier
+                modifier = iconModifier
                     .height(iconSize)
                     .align(Alignment.BottomStart)
                     .padding(SpaceSmall),
@@ -93,7 +94,7 @@ fun BannerSeaction(
             }
 
             Row (
-                modifier = Modifier
+                modifier = iconModifier
                     .height(iconSize)
                     .align(Alignment.BottomEnd)
                     .padding(SpaceSmall),

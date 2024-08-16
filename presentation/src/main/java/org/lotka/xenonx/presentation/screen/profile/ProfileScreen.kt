@@ -67,7 +67,6 @@ import org.lotka.xenonx.presentation.util.Dimension.profilePictureSizeLarge
 import org.lotka.xenonx.presentation.util.toPx
 import javax.xml.transform.Source
 import kotlin.random.Random
-
 @Composable
 fun ProfileScreen(
     navController: NavController,
@@ -75,10 +74,15 @@ fun ProfileScreen(
     var toolbarOffsetY by remember {
         mutableIntStateOf(0)
     }
+    val lazyListState = rememberLazyListState()
+    val iconSizeExpanded = 35.dp
     val toolbarHeightCollapsed = 75.dp
     val bannerHeight = (LocalConfiguration.current.screenWidthDp / 2.5f).dp
     val toolbarHeightExpanded = remember {
         bannerHeight + profilePictureSizeLarge
+    }
+    val iconCollapsedOffsetY = remember {
+        (toolbarHeightCollapsed - iconSizeExpanded) / 2f
     }
     val imageCollapsedOffsetY = remember {
         (toolbarHeightCollapsed - profilePictureSizeLarge / 2) / 2
@@ -93,11 +97,16 @@ fun ProfileScreen(
         override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
             val delta = available.y
             val newOffset = toolbarOffsetY + delta
-            toolbarOffsetY = newOffset.coerceIn(
-                minimumValue = -maxOffset.toPx(),
-                maximumValue = 0f
-            ).toInt()
-            expandedRatio = ((toolbarOffsetY + maxOffset.toPx()) / maxOffset.toPx()).coerceIn(0f, 1f)
+
+            // Only scroll the banner/profile when the user is scrolling up
+            if (lazyListState.firstVisibleItemIndex == 0) {
+                toolbarOffsetY = newOffset.coerceIn(
+                    minimumValue = -maxOffset.toPx(),
+                    maximumValue = 0f
+                ).toInt()
+                expandedRatio = ((toolbarOffsetY + maxOffset.toPx()) / maxOffset.toPx()).coerceIn(0f, 1f)
+            }
+
             return Offset.Zero
         }
     }
@@ -108,6 +117,7 @@ fun ProfileScreen(
             .nestedScroll(nestedScrollConnection)
     ) {
         LazyColumn(
+            state = lazyListState,
             modifier = Modifier
                 .fillMaxSize()
         ) {
@@ -165,7 +175,11 @@ fun ProfileScreen(
                         minimumValue = toolbarHeightCollapsed,
                         maximumValue = bannerHeight
                     )
-                )
+                ),
+                iconModifier = Modifier.graphicsLayer {
+                    translationY = (1f - expandedRatio) *
+                            -iconCollapsedOffsetY.toPx()
+                }
             )
             Box(
                 modifier = Modifier
