@@ -48,7 +48,7 @@ fun HomeApp(
             content = { _ ->
                 NavHost(
                     navController = navController,
-                    startDestination = ScreensNavigation.SplashScreen.route
+                    startDestination = ScreensNavigation.ProfileScreen.route
                 ) {
                     composable(
                         route = ScreensNavigation.SplashScreen.route,

@@ -50,21 +50,8 @@ fun ProfileHeaderSection(
             .offset(y = -profilePictureSizeLarge / 2),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-              Image(
-          painter = painterResource(id = R.drawable.arman) ,
-          contentDescription = "",
 
-          modifier = Modifier
-              .size(profilePictureSizeLarge)
-              .clip(CircleShape)
-              .border(
-                  width = 1.dp,
-                  color = MaterialTheme.colors.onSurface,
-                  shape = CircleShape
-              )
-               , contentScale = ContentScale.Crop
 
-          )
 
         Spacer(modifier = Modifier.height(SpaceSmall))
 
