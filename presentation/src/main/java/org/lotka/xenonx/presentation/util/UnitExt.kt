@@ -3,6 +3,7 @@ package org.lotka.xenonx.presentation.util
 import android.content.res.Resources
 import android.util.TypedValue
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 
 
 fun Dp.toPx ():Float {
@@ -12,4 +13,8 @@ fun Dp.toPx ():Float {
         Resources.getSystem().displayMetrics
 
     )
+}
+
+fun Float.toDp(): Dp {
+    return (this/Resources.getSystem().displayMetrics.density).dp
 }

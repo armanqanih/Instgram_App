@@ -24,6 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -31,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
@@ -40,6 +42,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.coerceIn
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import me.onebone.toolbar.CollapsingToolbar
@@ -61,6 +64,7 @@ import org.lotka.xenonx.presentation.screen.profile.composable.ProfileHeaderSect
 import org.lotka.xenonx.presentation.ui.navigation.ScreensNavigation
 import org.lotka.xenonx.presentation.util.Dimension.SpaceMedium
 import org.lotka.xenonx.presentation.util.Dimension.profilePictureSizeLarge
+import org.lotka.xenonx.presentation.util.toPx
 import javax.xml.transform.Source
 import kotlin.random.Random
 
@@ -68,125 +72,132 @@ import kotlin.random.Random
 fun ProfileScreen(
     navController: NavController,
 ) {
-
-
     var toolbarOffsetY by remember {
-        mutableStateOf(0)
+        mutableIntStateOf(0)
     }
-    val toolbarHeightCollapsed = 56.dp
-    val bannerHeight = (LocalConfiguration.current.screenWidthDp /2.5f).dp
-    val toolbarHeightExpended = remember {
+    val toolbarHeightCollapsed = 75.dp
+    val bannerHeight = (LocalConfiguration.current.screenWidthDp / 2.5f).dp
+    val toolbarHeightExpanded = remember {
         bannerHeight + profilePictureSizeLarge
     }
+    val imageCollapsedOffsetY = remember {
+        (toolbarHeightCollapsed - profilePictureSizeLarge / 2) / 2
+    }
 
+    val maxOffset = toolbarHeightExpanded - toolbarHeightCollapsed
+    var expandedRatio by remember {
+        mutableStateOf(1f)
+    }
 
     val nestedScrollConnection = object : NestedScrollConnection {
         override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-             val delta = available.y
+            val delta = available.y
             val newOffset = toolbarOffsetY + delta
-//            toolbarOffsetY = newOffset.coerceIn(
-//                minimumValue = ,
-//                maximumValue =
-//            )
-            return super.onPreScroll(available, source)
+            toolbarOffsetY = newOffset.coerceIn(
+                minimumValue = -maxOffset.toPx(),
+                maximumValue = 0f
+            ).toInt()
+            expandedRatio = ((toolbarOffsetY + maxOffset.toPx()) / maxOffset.toPx()).coerceIn(0f, 1f)
+            return Offset.Zero
         }
     }
 
-    // Top Toolbar
-//    StandardToolBar(
-//        navController = navController,
-//        title = {
-//            Text(
-//                text = stringResource(R.string.you_profile),
-//                fontWeight = FontWeight.Bold,
-//                color = MaterialTheme.colors.onBackground,
-//            )
-//        },
-//        modifier = Modifier.fillMaxWidth(),
-//        showBackArrow = false,
-//        navAction = {
-//            IconButton(onClick = { /* Menu action */ }) {
-//                Icon(
-//                    imageVector = Icons.Default.Menu,
-//                    contentDescription = "") // Use proper description
-//
-//            }
-//        }
-//    )
-
-Box(modifier = Modifier.fillMaxSize()){
-    // Main Content
-    LazyColumn(
+    Box(
         modifier = Modifier
-            .fillMaxSize() // Take remaining space
+            .fillMaxSize()
+            .nestedScroll(nestedScrollConnection)
     ) {
-        item { 
-            Spacer(modifier = Modifier.height(
-                toolbarHeightExpended
-            ))
-        }
-
-        item {
-            ProfileHeaderSection(
-                user = UserModel(
-                    profilePictureUrl = "",
-                    userName = "ArmanSherwanii",
-                    description = "To display numbers in a format similar to " +
-                            "Instagram, where numbers greater than 1,000 are shown as \"1k\", and numbers greater " +
-                            "than 1,000,000 are shown as \"1M\", you can create a function ",
-                    followerCount = 1,
-                    followingCount = 250000,
-                    postCount = 12
-                )
-            )
-        }
-
-        items(20) {
-            PostItem(
-                postModel = PostModel(
-                    id = 1,
-                    userName = "Arman Sherwamii",
-                    profileImage = "",
-                    postImage = "",
-                    description = "ahahaha",
-                    likes = 17,
-                    comments = 7,
-                ),
-                showProfileImage = false,
-                onPostClick = {
-                    navController.navigate(ScreensNavigation.PostDetailScreen.route)
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-    }
-
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .align(Alignment.TopCenter)
-    ) {
-        BannerSeaction(modifier = Modifier.height(bannerHeight))
-        Image(
-            painter = painterResource(id = R.drawable.arman) ,
-            contentDescription = "",
+        LazyColumn(
             modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .graphicsLayer {
-                    translationY = -profilePictureSizeLarge.toPx() / 2f
-                }
-                .size(profilePictureSizeLarge)
-                .clip(CircleShape)
-                .border(
-                    width = 1.dp,
-                    color = MaterialTheme.colors.onSurface,
-                    shape = CircleShape
+                .fillMaxSize()
+        ) {
+            item {
+                Spacer(
+                    modifier = Modifier.height(
+                        toolbarHeightCollapsed + profilePictureSizeLarge / 2 + 150.dp
+                    )
                 )
-            , contentScale = ContentScale.Crop
+            }
 
-        )
+            item {
+                ProfileHeaderSection(
+                    user = UserModel(
+                        profilePictureUrl = "",
+                        userName = "ArmanSherwanii",
+                        description = "To display numbers in a format similar to " +
+                                "Instagram, where numbers greater than 1,000 are shown as \"1k\", and numbers greater " +
+                                "than 1,000,000 are shown as \"1M\", you can create a function ",
+                        followerCount = 1,
+                        followingCount = 250000,
+                        postCount = 12
+                    )
+                )
+            }
+
+            items(20) {
+                PostItem(
+                    postModel = PostModel(
+                        id = 1,
+                        userName = "Arman Sherwamii",
+                        profileImage = "",
+                        postImage = "",
+                        description = "ahahaha",
+                        likes = 17,
+                        comments = 7,
+                    ),
+                    showProfileImage = false,
+                    onPostClick = {
+                        navController.navigate(ScreensNavigation.PostDetailScreen.route)
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        }
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.TopCenter)
+        ) {
+            BannerSeaction(
+                modifier = Modifier.height(
+                    (bannerHeight * expandedRatio).coerceIn(
+                        minimumValue = toolbarHeightCollapsed,
+                        maximumValue = bannerHeight
+                    )
+                )
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(profilePictureSizeLarge)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.arman),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .graphicsLayer {
+                            translationY = -profilePictureSizeLarge.toPx() / 2f +
+                                    (1f - expandedRatio) * imageCollapsedOffsetY.toPx()
+                            transformOrigin = TransformOrigin(
+                                pivotFractionX = 0.5f,
+                                pivotFractionY = 0f
+                            )
+                            val scale = 0.5f + expandedRatio * 0.5f
+                            scaleX = scale
+                            scaleY = scale
+                        }
+                        .size(profilePictureSizeLarge)
+                        .clip(CircleShape)
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colors.onSurface,
+                            shape = CircleShape
+                        ),
+                    contentScale = ContentScale.Crop
+                )
+            }
+        }
     }
 }
-
-
-    }
-
