@@ -14,4 +14,8 @@ object Dimension {
     val profilePictureSizeMedium = 75.dp
     val profilePictureSmallSize = 30.dp
 
+    val IconSizeSmall = 15.dp
+    val IconSizeMedium = 25.dp
+    val IconSizeLarge = 35.dp
 }
+

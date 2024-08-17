@@ -42,8 +42,10 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.coerceIn
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import me.onebone.toolbar.CollapsingToolbar
 import me.onebone.toolbar.CollapsingToolbarScaffold
@@ -70,29 +72,26 @@ import kotlin.random.Random
 @Composable
 fun ProfileScreen(
     navController: NavController,
+    viewModel: ProfileViewModel = hiltViewModel(),
+    profilePictureSize : Dp = profilePictureSizeLarge
 ) {
-    var toolbarOffsetY by remember {
-        mutableIntStateOf(0)
-    }
+    var toolbarOffsetY = viewModel.toolbarOffsetY.value
     val lazyListState = rememberLazyListState()
     val iconSizeExpanded = 35.dp
     val toolbarHeightCollapsed = 75.dp
     val bannerHeight = (LocalConfiguration.current.screenWidthDp / 2.5f).dp
     val toolbarHeightExpanded = remember {
-        bannerHeight + profilePictureSizeLarge
+        bannerHeight + profilePictureSize
     }
     val iconCollapsedOffsetY = remember {
         (toolbarHeightCollapsed - iconSizeExpanded) / 2f
     }
     val imageCollapsedOffsetY = remember {
-        (toolbarHeightCollapsed - profilePictureSizeLarge / 2) / 2
+        (toolbarHeightCollapsed - profilePictureSize / 2) / 2
     }
 
     val maxOffset = toolbarHeightExpanded - toolbarHeightCollapsed
-    var expandedRatio by remember {
-        mutableStateOf(1f)
-    }
-
+    var expandedRatio = viewModel.expandedRatio.value
     val nestedScrollConnection = object : NestedScrollConnection {
         override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
             val delta = available.y
@@ -103,7 +102,7 @@ fun ProfileScreen(
                 toolbarOffsetY = newOffset.coerceIn(
                     minimumValue = -maxOffset.toPx(),
                     maximumValue = 0f
-                ).toInt()
+                )
                 expandedRatio = ((toolbarOffsetY + maxOffset.toPx()) / maxOffset.toPx()).coerceIn(0f, 1f)
             }
 
@@ -124,7 +123,7 @@ fun ProfileScreen(
             item {
                 Spacer(
                     modifier = Modifier.height(
-                        toolbarHeightCollapsed + profilePictureSizeLarge / 2 + 150.dp
+                        toolbarHeightCollapsed + profilePictureSize / 2 + 150.dp
                     )
                 )
             }
@@ -184,7 +183,7 @@ fun ProfileScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(profilePictureSizeLarge)
+                    .height(profilePictureSize)
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.arman),
@@ -192,7 +191,7 @@ fun ProfileScreen(
                     modifier = Modifier
                         .align(Alignment.Center)
                         .graphicsLayer {
-                            translationY = -profilePictureSizeLarge.toPx() / 2f +
+                            translationY = -profilePictureSize.toPx() / 2f +
                                     (1f - expandedRatio) * imageCollapsedOffsetY.toPx()
                             transformOrigin = TransformOrigin(
                                 pivotFractionX = 0.5f,
@@ -202,7 +201,7 @@ fun ProfileScreen(
                             scaleX = scale
                             scaleY = scale
                         }
-                        .size(profilePictureSizeLarge)
+                        .size(profilePictureSize)
                         .clip(CircleShape)
                         .border(
                             width = 1.dp,

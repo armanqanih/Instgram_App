@@ -16,31 +16,30 @@ import org.lotka.xenonx.presentation.R
 
 @Composable
 fun StandardToolBar(
-    navController : NavController,
-    modifier: Modifier = Modifier ,
-    showBackArrow : Boolean = true ,
-    navAction : @Composable RowScope.()-> Unit = {},
-   title : @Composable () -> Unit = {}
-){
-
-   TopAppBar(
-       modifier = modifier,
-       navigationIcon = {
-           if (showBackArrow){
-               IconButton(onClick = {
-                   navController.navigateUp()
-               }) {
-                   Icon(imageVector = Icons.Default.ArrowBack
-                       , contentDescription = stringResource(R.string.arrowback),
-                       tint = MaterialTheme.colors.onBackground
-                   )
-               }
-           }
-       },
-       title = title,
-       actions = navAction,
-       backgroundColor = MaterialTheme.colors.surface,
-       elevation = 0.dp
-   )
-
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    showBackArrow: Boolean = false,
+    navAction: @Composable RowScope.() -> Unit = {},
+    title: @Composable () -> Unit = {},
+) {
+    TopAppBar(
+        title = title,
+        modifier = modifier,
+        navigationIcon = if(showBackArrow) {
+            {
+                IconButton(onClick = {
+                    navController.navigateUp()
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = stringResource(id = R.string.back),
+                        tint = MaterialTheme.colors.onBackground
+                    )
+                }
+            }
+        } else null,
+        actions = navAction,
+        backgroundColor = MaterialTheme.colors.surface,
+        elevation = 0.dp
+    )
 }

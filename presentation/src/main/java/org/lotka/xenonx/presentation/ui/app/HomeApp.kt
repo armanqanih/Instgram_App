@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.google.accompanist.pager.ExperimentalPagerApi
 import org.lotka.xenonx.domain.model.PostModel
+import org.lotka.xenonx.presentation.screen.edit_profile.EditProfileScreen
 import org.lotka.xenonx.presentation.screen.activity.ActivityScreen
 import org.lotka.xenonx.presentation.screen.profile.ProfileScreen
 import org.lotka.xenonx.presentation.screen.chat.ChatScreen
@@ -48,7 +49,7 @@ fun HomeApp(
             content = { _ ->
                 NavHost(
                     navController = navController,
-                    startDestination = ScreensNavigation.ProfileScreen.route
+                    startDestination = ScreensNavigation.EditProfileScreen.route
                 ) {
                     composable(
                         route = ScreensNavigation.SplashScreen.route,
@@ -129,6 +130,12 @@ fun HomeApp(
                                 comments = 7
                             )
                         )
+                    }
+
+                    composable(
+                        route = ScreensNavigation.EditProfileScreen.route,
+                    ) {
+                        EditProfileScreen(navController = navController)
                     }
 
 

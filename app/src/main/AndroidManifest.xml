@@ -31,6 +31,7 @@
             android:name=".presentation.ui.app.HomeActivity"
             android:exported="true"
             android:theme="@style/App.Starting.Theme"
+
             android:windowSoftInputMode="adjustPan">
 
             <intent-filter>
