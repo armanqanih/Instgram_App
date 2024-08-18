@@ -22,6 +22,7 @@ import org.lotka.xenonx.presentation.screen.login.LoginScreen
 import org.lotka.xenonx.presentation.screen.post.PostScreen
 import org.lotka.xenonx.presentation.screen.post_detail.PostDetailScreen
 import org.lotka.xenonx.presentation.screen.register.RegisterScreen
+import org.lotka.xenonx.presentation.screen.search.SearchScreen
 import org.lotka.xenonx.presentation.screen.splash.SplashScreen
 
 
@@ -49,7 +50,7 @@ fun HomeApp(
             content = { _ ->
                 NavHost(
                     navController = navController,
-                    startDestination = ScreensNavigation.EditProfileScreen.route
+                    startDestination = ScreensNavigation.SearchScreen.route
                 ) {
                     composable(
                         route = ScreensNavigation.SplashScreen.route,
@@ -136,6 +137,11 @@ fun HomeApp(
                         route = ScreensNavigation.EditProfileScreen.route,
                     ) {
                         EditProfileScreen(navController = navController)
+                    }
+                    composable(
+                        route = ScreensNavigation.SearchScreen.route,
+                    ) {
+                        SearchScreen(navController = navController)
                     }
 
 

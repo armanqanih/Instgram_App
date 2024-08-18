@@ -38,7 +38,6 @@ fun StandardTextField(
     textStyle : TextStyle = TextStyle(
         color = MaterialTheme.colors.onBackground
     ),
-    leadingIconColor: Color = MaterialTheme.colors.onBackground,
     onValueChange: (String) -> Unit,
     keyboardType: KeyboardType = KeyboardType.Text,
     isPasswordToggleDisplayed : Boolean = keyboardType == KeyboardType.Password,
@@ -66,7 +65,9 @@ fun StandardTextField(
         placeholder = {
             Text(
                 text = hint,
-                style = MaterialTheme.typography.body1)
+                style = MaterialTheme.typography.body1
+            ,   color = MaterialTheme.colors.onBackground
+            )
         },
          singleLine = singleLine,
         visualTransformation = if(!showPasswordToggle && isPasswordToggleDisplayed){
@@ -88,7 +89,9 @@ fun StandardTextField(
                 }
              icon()
 
-            }else null
+            } else  null
+
+
         },
         trailingIcon = {
             if (isPasswordToggleDisplayed) {

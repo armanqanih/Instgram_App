@@ -5,7 +5,7 @@ data class UserModel(
     val userName:String,
     val description:String,
     val followingCount : Int,
-    val followerCount : Int ,
+    val followerCount : Int,
     val postCount : Int
 
 )

@@ -49,5 +49,8 @@
     <string name="linkedin_profile_url">LinkedIn Profile Url</string>
     <string name="github_profile_url">Github Profile Url</string>
     <string name="save_changes">Save Changes</string>
+    <string name="search_for_user">Search For User</string>
+    <string name="enter_a_message">Enter a message</string>
+    <string name="search">Search ...</string>
 
 </resources>
