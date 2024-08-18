@@ -52,5 +52,8 @@
     <string name="search_for_user">Search For User</string>
     <string name="enter_a_message">Enter a message</string>
     <string name="search">Search ...</string>
+    <string name="create_a_new_post">Create a new post</string>
+    <string name="add_image">Add Image</string>
+    <string name="your_description">Your Description</string>
 
 </resources>

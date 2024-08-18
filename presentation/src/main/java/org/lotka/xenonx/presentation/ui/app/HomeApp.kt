@@ -50,7 +50,7 @@ fun HomeApp(
             content = { _ ->
                 NavHost(
                     navController = navController,
-                    startDestination = ScreensNavigation.SearchScreen.route
+                    startDestination = ScreensNavigation.CreatePostScreen.route
                 ) {
                     composable(
                         route = ScreensNavigation.SplashScreen.route,
@@ -142,6 +142,11 @@ fun HomeApp(
                         route = ScreensNavigation.SearchScreen.route,
                     ) {
                         SearchScreen(navController = navController)
+                    }
+                    composable(
+                        route = ScreensNavigation.CreatePostScreen.route,
+                    ) {
+                        CreatePostScreen(navController = navController)
                     }
 
 
