@@ -55,5 +55,6 @@
     <string name="create_a_new_post">Create a new post</string>
     <string name="add_image">Add Image</string>
     <string name="your_description">Your Description</string>
+    <string name="like_by">Like by</string>
 
 </resources>

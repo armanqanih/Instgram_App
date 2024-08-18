@@ -19,6 +19,7 @@ import org.lotka.xenonx.presentation.screen.chat.ChatScreen
 import org.lotka.xenonx.presentation.screen.create_post.CreatePostScreen
 import org.lotka.xenonx.presentation.screen.home.HomeScreen
 import org.lotka.xenonx.presentation.screen.login.LoginScreen
+import org.lotka.xenonx.presentation.screen.person_list_screen.PersonListScreen
 import org.lotka.xenonx.presentation.screen.post.PostScreen
 import org.lotka.xenonx.presentation.screen.post_detail.PostDetailScreen
 import org.lotka.xenonx.presentation.screen.register.RegisterScreen
@@ -44,13 +45,13 @@ fun HomeApp(
     keyboardController: SoftwareKeyboardController,
 
     ) {
-
+//https://github.com/armanqanih/Instgram_App
 
         Scaffold(
             content = { _ ->
                 NavHost(
                     navController = navController,
-                    startDestination = ScreensNavigation.CreatePostScreen.route
+                    startDestination = ScreensNavigation.LoginScreen.route
                 ) {
                     composable(
                         route = ScreensNavigation.SplashScreen.route,
@@ -78,13 +79,6 @@ fun HomeApp(
                     ) {
 
                         HomeScreen()
-
-                    }
-                    composable(
-                        route = ScreensNavigation.PostScreen.route,
-                    ) {
-
-                        PostScreen(navController = navController)
 
                     }
                     composable(
@@ -149,6 +143,11 @@ fun HomeApp(
                         CreatePostScreen(navController = navController)
                     }
 
+                    composable(
+                        route = ScreensNavigation.PersonListScreen.route,
+                    ) {
+                        PersonListScreen(navController = navController)
+                    }
 
                 }
 

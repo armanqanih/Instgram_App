@@ -1,4 +1,4 @@
-package org.lotka.xenonx.presentation.screen.search.compose
+package org.lotka.xenonx.presentation.composable.item
 
 import android.nfc.cardemulation.CardEmulation
 import androidx.compose.foundation.Image

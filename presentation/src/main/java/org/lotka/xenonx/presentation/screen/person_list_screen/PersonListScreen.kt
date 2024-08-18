@@ -1,4 +1,4 @@
-package org.lotka.xenonx.presentation.screen.search
+package org.lotka.xenonx.presentation.screen.person_list_screen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -34,20 +34,16 @@ import org.lotka.xenonx.presentation.R
 import org.lotka.xenonx.presentation.composable.StandardTextField
 import org.lotka.xenonx.presentation.composable.StandardToolBar
 import org.lotka.xenonx.presentation.composable.item.UserProfileItem
-import org.lotka.xenonx.presentation.screen.edit_profile.EditProfileEvent
 
-import org.lotka.xenonx.presentation.util.Dimension.SpaceLarge
 import org.lotka.xenonx.presentation.util.Dimension.SpaceMedium
 import org.lotka.xenonx.presentation.util.Dimension.SpaceSmall
 import org.lotka.xenonx.presentation.util.state.StandardTextFieldState
 
 @Composable
-fun SearchScreen(
+fun PersonListScreen(
     navController: NavController ,
-    viewModel: SearchScreenViewModel = hiltViewModel(),
-) {
 
-    val state = viewModel.state.collectAsState().value
+) {
 
     Column(modifier = Modifier.fillMaxSize()) {
 
@@ -56,7 +52,7 @@ fun SearchScreen(
                 .fillMaxWidth(),
             navController = navController,
             showBackArrow = true, title = {
-                Text(text = stringResource(R.string.search_for_user),
+                Text(text = stringResource(R.string.like_by),
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colors.onBackground)
 
@@ -64,27 +60,12 @@ fun SearchScreen(
             },
 
         )
-      Spacer(modifier = Modifier.height(SpaceMedium))
 
-
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(SpaceLarge)
-        ) {
-            StandardTextField(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                value = state.searchMessage,
-                hint = stringResource(R.string.search),
-                leadingIcon = Icons.Default.Search,
-                onValueChange ={
-                    viewModel.onEvent(SearchEvent.SearchMessageChange(it))
-                }
-            )
             Spacer(modifier = Modifier.height(SpaceMedium))
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
+                    .padding(SpaceMedium)
 
             ) {
 
@@ -124,5 +105,3 @@ fun SearchScreen(
 
 
     }
-
-}
