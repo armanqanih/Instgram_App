@@ -51,21 +51,7 @@ class RegisterViewModel @Inject constructor(
                 )
             }
 
-            is RegisterEvent.EmailError -> {
-                _state.value = _state.value.copy(
-                    emailError = event.emailError
-                )
-            }
-            is RegisterEvent.PasswordError -> {
-                _state.value = _state.value.copy(
-                    passwordError = event.passwordError
-                )
-            }
-            is RegisterEvent.UserNameError -> {
-                _state.value = _state.value.copy(
-                    userNameError = event.userNameError
-                )
-            }
+
         }
     }
 

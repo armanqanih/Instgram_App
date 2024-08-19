@@ -3,6 +3,7 @@ package org.lotka.xenonx.domain.util
 sealed class ActivityAction {
 
     object LikePost : ActivityAction()
+    object FollowedYou : ActivityAction()
     object CommentedOnPost : ActivityAction()
 
 }

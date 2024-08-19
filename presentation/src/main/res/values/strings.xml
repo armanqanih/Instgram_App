@@ -56,5 +56,6 @@
     <string name="add_image">Add Image</string>
     <string name="your_description">Your Description</string>
     <string name="like_by">Like by</string>
+    <string name="followed_you">followed you</string>
 
 </resources>

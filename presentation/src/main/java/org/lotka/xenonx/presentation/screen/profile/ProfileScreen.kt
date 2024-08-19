@@ -23,6 +23,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -75,7 +76,7 @@ fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
     profilePictureSize : Dp = profilePictureSizeLarge
 ) {
-    var toolbarOffsetY = viewModel.toolbarOffsetY.value
+    var toolbarState = viewModel.toolbarState.collectAsState().value
     val lazyListState = rememberLazyListState()
     val iconSizeExpanded = 35.dp
     val toolbarHeightCollapsed = 75.dp
@@ -91,19 +92,18 @@ fun ProfileScreen(
     }
 
     val maxOffset = toolbarHeightExpanded - toolbarHeightCollapsed
-    var expandedRatio = viewModel.expandedRatio.value
     val nestedScrollConnection = object : NestedScrollConnection {
         override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
             val delta = available.y
-            val newOffset = toolbarOffsetY + delta
+            val newOffset = toolbarState.toolbarOffsetY + delta
 
             // Only scroll the banner/profile when the user is scrolling up
             if (lazyListState.firstVisibleItemIndex == 0) {
-                toolbarOffsetY = newOffset.coerceIn(
+                viewModel.setToolbarOffsetY(newOffset.coerceIn(
                     minimumValue = -maxOffset.toPx(),
                     maximumValue = 0f
-                )
-                expandedRatio = ((toolbarOffsetY + maxOffset.toPx()) / maxOffset.toPx()).coerceIn(0f, 1f)
+                ))
+                viewModel.setExpandedRatio(((toolbarState.toolbarOffsetY + maxOffset.toPx()) / maxOffset.toPx()).coerceIn(0f, 1f))
             }
 
             return Offset.Zero
@@ -170,13 +170,13 @@ fun ProfileScreen(
         ) {
             BannerSeaction(
                 modifier = Modifier.height(
-                    (bannerHeight * expandedRatio).coerceIn(
+                    (bannerHeight * toolbarState.expandedRatio).coerceIn(
                         minimumValue = toolbarHeightCollapsed,
                         maximumValue = bannerHeight
                     )
                 ),
                 iconModifier = Modifier.graphicsLayer {
-                    translationY = (1f - expandedRatio) *
+                    translationY = (1f - toolbarState.expandedRatio) *
                             -iconCollapsedOffsetY.toPx()
                 }
             )
@@ -192,12 +192,12 @@ fun ProfileScreen(
                         .align(Alignment.Center)
                         .graphicsLayer {
                             translationY = -profilePictureSize.toPx() / 2f +
-                                    (1f - expandedRatio) * imageCollapsedOffsetY.toPx()
+                                    (1f - toolbarState.expandedRatio) * imageCollapsedOffsetY.toPx()
                             transformOrigin = TransformOrigin(
                                 pivotFractionX = 0.5f,
                                 pivotFractionY = 0f
                             )
-                            val scale = 0.5f + expandedRatio * 0.5f
+                            val scale = 0.5f + toolbarState.expandedRatio * 0.5f
                             scaleX = scale
                             scaleY = scale
                         }

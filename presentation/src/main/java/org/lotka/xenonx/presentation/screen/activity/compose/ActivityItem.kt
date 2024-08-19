@@ -55,6 +55,10 @@ fun ActivityItem(
                ActivityAction.LikePost -> {
                    stringResource(R.string.comment_on)
                }
+
+               ActivityAction.FollowedYou -> {
+                   stringResource(R.string.followed_you)
+               }
            }
 
            val actionText = when(activity.actionType){
@@ -64,6 +68,9 @@ fun ActivityItem(
                ActivityAction.LikePost -> {
                    stringResource(R.string.your_post)
                }
+
+               ActivityAction.FollowedYou ->
+                    ""
            }
            Text(text = buildAnnotatedString {
                val boldStyle = SpanStyle(fontWeight = FontWeight.Bold)
