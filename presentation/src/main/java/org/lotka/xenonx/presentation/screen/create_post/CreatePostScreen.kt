@@ -39,6 +39,7 @@ import org.lotka.xenonx.presentation.ui.navigation.ScreensNavigation
 import org.lotka.xenonx.presentation.util.Dimension.SpaceLarge
 import org.lotka.xenonx.presentation.util.Dimension.SpaceMedium
 import org.lotka.xenonx.presentation.util.Dimension.SpaceSmall
+import org.lotka.xenonx.presentation.util.error.PostDescriptionError
 import org.lotka.xenonx.presentation.util.state.StandardTextFieldState
 
 @Composable
@@ -46,7 +47,7 @@ fun CreatePostScreen(
     navController: NavController,
     viewModel: CreatePostScreenViewModel = hiltViewModel(),
 ){
-    val state = viewModel.state.collectAsState().value
+    val descriptionState = viewModel.descriptionState.collectAsState().value
 
     Column(modifier = Modifier.fillMaxSize()) {
 
@@ -100,14 +101,20 @@ fun CreatePostScreen(
             Spacer(modifier = Modifier.height(SpaceMedium))
             StandardTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = state.descriptionOfPost,
+                value = descriptionState.text,
                 hint = stringResource(R.string.your_description),
                 maxLines = 5,
+                error = when(descriptionState.error){
+                    is PostDescriptionError.FieldEmpty -> {
+                        stringResource(R.string.this_field_cant_be_empty)
+                    }
+                    else -> {
+                        ""
+                    }
+                },
                 singleLine = false,
                 onValueChange ={
-                    viewModel.onEvent(
-                        CreatePostEvent.DescriptionOfPostChange(it)
-                    )
+                   viewModel.setDescription(it)
                 }
             )
             Spacer(modifier = Modifier.height(SpaceMedium))

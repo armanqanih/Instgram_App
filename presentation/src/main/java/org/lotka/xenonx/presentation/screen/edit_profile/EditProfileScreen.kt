@@ -40,6 +40,7 @@ import org.lotka.xenonx.presentation.screen.edit_profile.compose.Chip
 import org.lotka.xenonx.presentation.util.Dimension.SpaceLarge
 import org.lotka.xenonx.presentation.util.Dimension.SpaceMedium
 import org.lotka.xenonx.presentation.util.Dimension.profilePictureSizeLarge
+import org.lotka.xenonx.presentation.util.error.EditProfileError
 import org.lotka.xenonx.presentation.util.state.StandardTextFieldState
 import kotlin.random.Random
 
@@ -109,7 +110,7 @@ fun  EditProfileScreen(
                     value = state.userNameState.text,
                     leadingIcon = Icons.Default.Person,
                     hint = stringResource(R.string.user_name),
-                    error = state.userNameState.error,
+                    error = state.userNameState.error.toString(),
                     onValueChange ={
                         viewModel.onEvent(EditProfileEvent.UserNameChange(
                             StandardTextFieldState(text = it)
@@ -121,7 +122,7 @@ fun  EditProfileScreen(
                     modifier = Modifier.fillMaxWidth(),
                     value = state.instagramTextState.text,
                     hint = stringResource(R.string.instagram_profile_url),
-                    error = state.instagramTextState.error,
+                    error = state.instagramTextState.error.toString(),
                     leadingIcon = ImageVector.vectorResource(id = R.drawable.instagram)
                     ,
                     onValueChange ={
@@ -135,7 +136,13 @@ fun  EditProfileScreen(
                     modifier = Modifier.fillMaxWidth(),
                     value = state.linkedInTextState.text,
                     hint = stringResource(R.string.linkedin_profile_url),
-                    error = state.linkedInTextState.error,
+                    error = when(state.linkedInTextState.error){
+                        is EditProfileError.FieldEmpty -> {
+                            stringResource(R.string.this_field_cant_be_empty)
+                        }
+
+                        else -> {""}
+                    },
                     leadingIcon = ImageVector.vectorResource(id = R.drawable.linkedin)
                     ,
                     onValueChange ={
@@ -149,7 +156,13 @@ fun  EditProfileScreen(
                     modifier = Modifier.fillMaxWidth(),
                     value = state.githubTextState.text,
                     hint = stringResource(R.string.github_profile_url),
-                    error = state.githubTextState.error,
+                    error = when(state.githubTextState.error){
+                        is EditProfileError.FieldEmpty -> {
+                            stringResource(R.string.this_field_cant_be_empty)
+                        }
+
+                        else -> {""}
+                    },
                     leadingIcon = ImageVector.vectorResource(id = R.drawable.github)
                     ,
                     onValueChange ={
@@ -164,7 +177,12 @@ fun  EditProfileScreen(
                     value = state.bioState.text,
                     hint = "bio",
                     leadingIcon = Icons.Default.Description,
-                    error = state.bioState.error,
+                    error = when(state.bioState.error){
+                        is EditProfileError.FieldEmpty -> {
+                            stringResource(R.string.this_field_cant_be_empty)
+                        }
+                        else -> {""}
+                    },
                     maxLines = 3,
                     singleLine = false,
                     onValueChange ={

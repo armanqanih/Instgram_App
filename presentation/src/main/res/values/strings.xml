@@ -57,5 +57,9 @@
     <string name="your_description">Your Description</string>
     <string name="like_by">Like by</string>
     <string name="followed_you">followed you</string>
+    <string name="input_too_short">"The minimum length is %d "</string>
+    <string name="this_field_cant_be_empty">This field cant be empty</string>
+    <string name="not_a_vaild_email">Not a vaild email</string>
+    <string name="validate_password">Password needs to contain at least one UpperCase letter and one number</string>
 
 </resources>

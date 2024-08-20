@@ -35,15 +35,24 @@ import androidx.compose.ui.res.stringResource
 import org.lotka.xenonx.presentation.R
 import org.lotka.xenonx.presentation.composable.StandardTextField
 import org.lotka.xenonx.presentation.ui.navigation.ScreensNavigation
+import org.lotka.xenonx.presentation.util.Constants.MIN_PASSWORD_LENGTH
+import org.lotka.xenonx.presentation.util.Constants.MIN_USERNAME_LENGTH
 import org.lotka.xenonx.presentation.util.Dimension.SpaceLarge
 import org.lotka.xenonx.presentation.util.Dimension.SpaceMedium
 import org.lotka.xenonx.presentation.util.UiEvent
+import org.lotka.xenonx.presentation.util.error.AuthError
+
 @Composable
 fun RegisterScreen(
     navController: NavController,
     viewModel: RegisterViewModel = hiltViewModel(),
 ) {
-    val state = viewModel.state.collectAsState().value
+
+
+    val usernameState = viewModel.userNameState.collectAsState().value
+    val passwordState = viewModel.passwordState.collectAsState().value
+    val emailState = viewModel.emailState.collectAsState().value
+
     val scaffoldState = rememberScaffoldState()
 
     LaunchedEffect(key1 = true) {
@@ -85,53 +94,79 @@ fun RegisterScreen(
 
                 Spacer(modifier = Modifier.height(SpaceMedium))
                 StandardTextField(
-                    value = state.email,
+                    value = emailState.text,
                     hint = stringResource(R.string.enter_you_email),
                     onValueChange = {
                         viewModel.onEvent(RegisterEvent.EnterEmail(it))
                     },
                     singleLine = true,
                     keyboardType = KeyboardType.Email,
-                    error = state.emailError,
+                    error = when(emailState.error){
+                       is AuthError.FieldEmpty -> {
+                            stringResource(R.string.this_field_cant_be_empty)
+                        }
+                        is AuthError.InvalidEmail ->{
+                            stringResource(R.string.not_a_vaild_email)
+                        }
+                        null -> ""
+                        else -> {""}
+                    }
+
+
+
                 )
                 Spacer(modifier = Modifier.height(SpaceMedium))
                 StandardTextField(
-                    value = state.userName,
+                    value = usernameState.text,
                     hint = stringResource(R.string.enter_user_name),
                     onValueChange = {
                         viewModel.onEvent(RegisterEvent.EnterUserName(it))
                     },
                     singleLine = true,
                     keyboardType = KeyboardType.Text,
-                    error = state.userNameError,
+                    error = when(usernameState.error){
+                        is AuthError.FieldEmpty -> {
+                            stringResource(R.string.this_field_cant_be_empty)
+                        }
+                        is AuthError.InputTooShort ->{
+                            stringResource(R.string.input_too_short,MIN_USERNAME_LENGTH)
+                        }
+                        null -> ""
+                        else -> {""}
+                    },
                 )
                 Spacer(modifier = Modifier.height(SpaceMedium))
                 StandardTextField(
-                    value = state.password,
+                    value = passwordState.text,
                     hint = stringResource(R.string.Password),
                     onValueChange = {
                         viewModel.onEvent(RegisterEvent.EnterPassword(it))
                     },
                     singleLine = true,
                     keyboardType = KeyboardType.Password,
-                    error = state.passwordError,
+                    error = when(passwordState.error){
+                        is AuthError.FieldEmpty -> {
+                            stringResource(R.string.this_field_cant_be_empty)
+                        }
+                        is AuthError.InputTooShort ->{
+                            stringResource(R.string.input_too_short,MIN_PASSWORD_LENGTH)
+                        }
+                        is AuthError.InvalidPassword -> {
+                            stringResource(R.string.validate_password)
+                        }
+                        else -> ""
+                    },
+                    onPasswordToggleClick = {
+                        viewModel.onEvent(RegisterEvent.IsPasswordVisibility)
+                    },
+
                 )
 
-
-
-                state?.error?.let {
-                    if (it.isNotEmpty()) {
-                        Text(
-                            text = it,
-                            color = MaterialTheme.colors.error
-                        )
-                    }
-                }
                 Spacer(modifier = Modifier.height(SpaceMedium))
                 Button(
                     onClick = {
                         viewModel.onEvent(RegisterEvent.Register)
-                              navController.navigate(ScreensNavigation.LoginScreen.route)
+//                              navController.navigate(ScreensNavigation.LoginScreen.route)
 
                               },
                     modifier = Modifier
@@ -140,7 +175,9 @@ fun RegisterScreen(
                         .align(Alignment.End)
                         .clip(shape = RoundedCornerShape(8.dp))
                         .background(MaterialTheme.colors.primary),
-                    enabled = !state.isLoading && state.email.isNotEmpty() && state.userName.isNotEmpty() && state.password.isNotEmpty()
+                    enabled =  emailState.text.isNotEmpty()
+                               && usernameState.text.isNotEmpty()
+                               && passwordState.text.isNotEmpty()
                 ) {
                     Text(
                         text = stringResource(R.string.register),
@@ -148,9 +185,9 @@ fun RegisterScreen(
                     )
                 }
 
-                if (state.isLoading) {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
-                }
+//                if (state.isLoading) {
+//                    CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+//                }
 
 
             }

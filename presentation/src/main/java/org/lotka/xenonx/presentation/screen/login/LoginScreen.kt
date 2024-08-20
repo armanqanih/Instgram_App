@@ -117,20 +117,12 @@ fun LoginScreen(
                     singleLine = true,
                     keyboardType = KeyboardType.Password,
                     error = state.passwordError,
-                    showPasswordToggle = state.showPassword,
+                    isPasswordVisible = state.showPassword,
                     onPasswordToggleClick = {
                         viewModel.onEvent(LoginEvent.ShowPassword(it))
                     }
                 )
-                state?.error.let {
-                    if (it != null) {
-                        Text(
-                            text = it,
-                            color = MaterialTheme.colors.error
-                        )
-                    }
 
-                }
                 Spacer(modifier = Modifier.height(SpaceMedium))
                 Button(
                     onClick = {

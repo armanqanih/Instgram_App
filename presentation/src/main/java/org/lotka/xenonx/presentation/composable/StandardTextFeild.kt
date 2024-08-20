@@ -41,7 +41,7 @@ fun StandardTextField(
     keyboardType: KeyboardType = KeyboardType.Text,
     isPasswordToggleDisplayed: Boolean = keyboardType == KeyboardType.Password,
     singleLine: Boolean = true,
-    showPasswordToggle: Boolean = false,
+    isPasswordVisible: Boolean = false,
     onPasswordToggleClick: (Boolean) -> Unit = {}
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -64,7 +64,7 @@ fun StandardTextField(
                 )
             },
             singleLine = singleLine,
-            visualTransformation = if (!showPasswordToggle && isPasswordToggleDisplayed) {
+            visualTransformation = if (!isPasswordVisible && isPasswordToggleDisplayed) {
                 PasswordVisualTransformation()
             } else {
                 VisualTransformation.None
@@ -84,14 +84,14 @@ fun StandardTextField(
                 if (isPasswordToggleDisplayed) {
                     IconButton(
                         onClick = {
-                            onPasswordToggleClick(!showPasswordToggle)
+                            onPasswordToggleClick(!isPasswordVisible)
                         },
                         modifier = Modifier.semantics {
                             testTag = "password_toggle"
                         }
                     ) {
                         Icon(
-                            imageVector = if (showPasswordToggle) {
+                            imageVector = if (isPasswordVisible) {
                                 Icons.Filled.Visibility
                             } else {
                                 Icons.Filled.VisibilityOff
