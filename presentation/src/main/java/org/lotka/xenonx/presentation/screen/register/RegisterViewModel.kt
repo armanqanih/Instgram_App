@@ -4,11 +4,14 @@ import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.lotka.xenonx.domain.usecase.RegisterUserUseCase
+import org.lotka.xenonx.domain.util.Resource
 import org.lotka.xenonx.presentation.util.Constants.MIN_PASSWORD_LENGTH
 import org.lotka.xenonx.presentation.util.Constants.MIN_USERNAME_LENGTH
 
@@ -20,8 +23,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-
+    private val registerUserUseCase: RegisterUserUseCase
 ) : ViewModel() {
+
+    private val _state = MutableStateFlow(RegisterState())
+    val state = _state.asStateFlow()
 
     private val _userNameState = MutableStateFlow(StandardTextFieldState())
     val userNameState = _userNameState.asStateFlow()
@@ -32,9 +38,11 @@ class RegisterViewModel @Inject constructor(
     private val _passwordState = MutableStateFlow(PasswordTextFieldState())
     val passwordState = _passwordState.asStateFlow()
 
-
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
+
+
+
 
     fun onEvent(event: RegisterEvent) {
         when (event) {
@@ -70,16 +78,73 @@ class RegisterViewModel @Inject constructor(
 
             is RegisterEvent.Register -> {
                 viewModelScope.launch {
-                    validateUserName(userNameState.value.text)
-                    validateEmail(emailState.value.text)
-                    validatePassword(passwordState.value.text)
-                    _eventFlow.emit(UiEvent.ShowSnakeBar("You have successfully registered"))
+                    validateAndRegisterUser()
                 }
             }
 
 
         }
     }
+
+
+    private fun validateAndRegisterUser() {
+        val username = _userNameState.value.text
+        val email = _emailState.value.text
+        val password = _passwordState.value.text
+
+        validateUserName(username)
+        validateEmail(email)
+        validatePassword(password)
+
+        if (_userNameState.value.error == null &&
+            _emailState.value.error == null &&
+            _passwordState.value.error == null
+        ) {
+            registerUser(email, password)
+
+
+
+
+        }
+    }
+
+
+
+    private fun registerUser(email: String, password: String) {
+        viewModelScope.launch {
+            _state.value = _state.value.copy(isLoading = true)
+
+            try {
+                // Collect the result from the use case
+                registerUserUseCase(email, password).collect { result ->
+                    when (result) {
+                        is Resource.Success -> {
+                            // Set loading to false and handle success
+                            _state.value = _state.value.copy(isLoading = false)
+                            result.data?.let {
+                                _eventFlow.emit(UiEvent.ShowSnakeBar("You have successfully registered"))
+                                // Navigate to another screen or reset form
+                            }
+                        }
+                        is Resource.Error -> {
+                            // Set loading to false and handle error
+                            _state.value = _state.value.copy(isLoading = false)
+                            _eventFlow.emit(UiEvent.ShowSnakeBar(result.message ?: "An unexpected error occurred"))
+                        }
+                        is Resource.Loading -> {
+                            // Set loading to true
+                            _state.value = _state.value.copy(isLoading = true)
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                // Handle any unexpected exceptions
+                _state.value = _state.value.copy(isLoading = false)
+                _eventFlow.emit(UiEvent.ShowSnakeBar("An internal error occurred: ${e.localizedMessage}"))
+            }
+        }
+    }
+
 
 
     private fun validateUserName(username: String) {
@@ -140,7 +205,7 @@ class RegisterViewModel @Inject constructor(
         }
         val capitalLetterInPassword = password.any { it.isUpperCase() }
         val numberInPassword = password.any { it.isDigit() }
-        if (!capitalLetterInPassword || numberInPassword) {
+        if (!capitalLetterInPassword || !numberInPassword) {
             _passwordState.value = _passwordState.value.copy(
                 error = AuthError.InvalidPassword
             )
@@ -150,8 +215,8 @@ class RegisterViewModel @Inject constructor(
         _passwordState.value = _passwordState.value.copy(
             error = null
         )
-
     }
+
 
 
 }

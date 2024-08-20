@@ -7,13 +7,14 @@ plugins {
     id ("kotlin-parcelize")
     id ("com.google.firebase.crashlytics")
     id ("com.google.gms.google-services")
+
 }
 
 android {
     compileSdk =  34
     defaultConfig {
         applicationId = "org.lotka.xenonx"
-        minSdk =  21
+        minSdk =  23
         targetSdk = 34
         versionCode = 164
         versionName =   "6.0.5"
@@ -235,10 +236,14 @@ dependencies {
 
 
     //firebase
+    implementation ("com.google.firebase:firebase-auth-ktx:23.0.0")
+    implementation ("com.google.firebase:firebase-firestore:25.0.0")
+    implementation ("com.google.firebase:firebase-common:21.0.0")
 
-    implementation ("com.google.firebase:firebase-analytics-ktx:21.5.0")
-    implementation ("com.google.firebase:firebase-analytics:21.5.0")
+    implementation ("com.google.firebase:firebase-analytics-ktx:22.0.2")
+    implementation ("com.google.firebase:firebase-analytics:22.0.2")
 
+//    implementation("com.google.firebase:firebase-ads:21.5.1")
 
 //    implementation ("com.google.firebase:firebase-crashlytics-ktx:18.5.1")
 //    implementation ("com.google.firebase:firebase-perf-ktx:20.5.0")

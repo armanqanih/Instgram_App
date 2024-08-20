@@ -52,6 +52,7 @@ fun RegisterScreen(
     val usernameState = viewModel.userNameState.collectAsState().value
     val passwordState = viewModel.passwordState.collectAsState().value
     val emailState = viewModel.emailState.collectAsState().value
+    val state = viewModel.state.collectAsState().value
 
     val scaffoldState = rememberScaffoldState()
 
@@ -185,9 +186,12 @@ fun RegisterScreen(
                     )
                 }
 
-//                if (state.isLoading) {
-//                    CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
-//                }
+                if (state.isLoading) {
+                    CircularProgressIndicator(modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(SpaceMedium)
+                    )
+                }
 
 
             }
