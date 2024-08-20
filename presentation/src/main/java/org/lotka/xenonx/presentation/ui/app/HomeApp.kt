@@ -75,7 +75,7 @@ fun HomeApp(
 
                     }
                     composable(
-                        route = ScreensNavigation.ChatScreen.route,
+                        route = ScreensNavigation.HomeScreen.route,
                     ) {
 
                         HomeScreen()

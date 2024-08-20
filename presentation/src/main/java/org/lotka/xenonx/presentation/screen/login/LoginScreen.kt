@@ -42,16 +42,23 @@ import androidx.compose.ui.res.stringResource
 import kotlinx.coroutines.launch
 import org.lotka.xenonx.presentation.R
 import org.lotka.xenonx.presentation.composable.StandardTextField
+import org.lotka.xenonx.presentation.screen.register.RegisterEvent
 import org.lotka.xenonx.presentation.ui.navigation.ScreensNavigation
+import org.lotka.xenonx.presentation.util.Constants.MIN_PASSWORD_LENGTH
 import org.lotka.xenonx.presentation.util.Dimension.SpaceLarge
 import org.lotka.xenonx.presentation.util.Dimension.SpaceMedium
 import org.lotka.xenonx.presentation.util.UiEvent
+import org.lotka.xenonx.presentation.util.error.AuthError
 
 @Composable
 fun LoginScreen(
     navController: NavController,
     viewModel: LoginViewModel = hiltViewModel(),
 ) {
+
+    val passwordState = viewModel.passwordState.collectAsState().value
+    val emailState = viewModel.emailState.collectAsState().value
+
     val state = viewModel.state.collectAsState().value
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
@@ -61,6 +68,11 @@ fun LoginScreen(
             when (event) {
                 is UiEvent.ShowSnakeBar -> {
                     scaffoldState.snackbarHostState.showSnackbar(message = event.message)
+                }
+                is UiEvent.Navigate -> {
+                    navController.navigate(ScreensNavigation.HomeScreen.route) {
+                        popUpTo(ScreensNavigation.LoginScreen.route) { inclusive = true }
+                    }
                 }
             }
         }
@@ -98,28 +110,51 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(SpaceMedium))
                 StandardTextField(
-                    value = state.userName,
-                    hint = stringResource(R.string.enter_user_name),
+                    value = emailState.text,
+                    hint = stringResource(R.string.enter_user_email),
                     onValueChange = {
-                        viewModel.onEvent(LoginEvent.EnterUserName(it))
+                        viewModel.onEvent(LoginEvent.EnterEmail(it))
                     },
                     singleLine = true,
                     keyboardType = KeyboardType.Email,
-                    error = state.userNameError,
+                    error = when(emailState.error){
+                        is AuthError.FieldEmpty -> {
+                            stringResource(R.string.this_field_cant_be_empty)
+                        }
+                        is AuthError.InvalidEmail ->{
+                            stringResource(R.string.not_a_vaild_email)
+                        }
+                        null -> ""
+                        else -> {""}
+                    }
+
+
+
                 )
                 Spacer(modifier = Modifier.height(SpaceMedium))
                 StandardTextField(
-                    value = state.password,
+                    value = passwordState.text,
                     hint = stringResource(R.string.Password),
                     onValueChange = {
                         viewModel.onEvent(LoginEvent.EnterPassword(it))
                     },
                     singleLine = true,
                     keyboardType = KeyboardType.Password,
-                    error = state.passwordError,
-                    isPasswordVisible = state.showPassword,
+                    error = when(passwordState.error){
+                        is AuthError.FieldEmpty -> {
+                            stringResource(R.string.this_field_cant_be_empty)
+                        }
+                        is AuthError.InputTooShort ->{
+                            stringResource(R.string.input_too_short, MIN_PASSWORD_LENGTH)
+                        }
+                        is AuthError.InvalidPassword -> {
+                            stringResource(R.string.validate_password)
+                        }
+                        else -> ""
+                    },
+                    isPasswordVisible = passwordState.isPasswordVisible,
                     onPasswordToggleClick = {
-                        viewModel.onEvent(LoginEvent.ShowPassword(it))
+                        viewModel.onEvent(LoginEvent.IsPasswordVisibility)
                     }
                 )
 
@@ -127,7 +162,7 @@ fun LoginScreen(
                 Button(
                     onClick = {
                         viewModel.onEvent(LoginEvent.Login)
-                              navController.navigate(ScreensNavigation.PostScreen.route)
+//                              navController.navigate(ScreensNavigation.HomeScreen.route)
                               },
                     modifier = Modifier
                         .height(50.dp)
@@ -135,7 +170,8 @@ fun LoginScreen(
                         .align(Alignment.End)
                         .clip(shape = RoundedCornerShape(8.dp))
                         .background(MaterialTheme.colors.primary),
-                    enabled = !state.isLoading && state.userName.isNotEmpty() && state.password.isNotEmpty()
+                    enabled =  emailState.text.isNotEmpty() &&
+                               passwordState.text.isNotEmpty()
 
                 ) {
                     Text(
@@ -145,24 +181,13 @@ fun LoginScreen(
                 }
 
                 if (state.isLoading) {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+                    CircularProgressIndicator(modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(SpaceMedium)
+                    )
                 }
 
-//                state.loginResponse?.let {
-//                    Text(
-//                        text = "Login successful! Token: ${it.token}",
-//                        color = MaterialTheme.colors.primary,
-//                        modifier = Modifier.align(Alignment.CenterHorizontally)
-//                    )
-//                    if (it.token == state.userName || it.token == state.password ){
-//                        navController.navigate(ScreensNavigation.ChatScreen.route)
-//                    }else{
-//                        scope.launch {
-//                            scaffoldState.snackbarHostState.showSnackbar(
-//                                message = "Please Create An Account")
-//                        }
-//                    }
-//                }
+//
 
             }
 

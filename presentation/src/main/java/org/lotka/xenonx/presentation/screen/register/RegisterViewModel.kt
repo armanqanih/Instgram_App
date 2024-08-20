@@ -123,7 +123,8 @@ class RegisterViewModel @Inject constructor(
                             _state.value = _state.value.copy(isLoading = false)
                             result.data?.let {
                                 _eventFlow.emit(UiEvent.ShowSnakeBar("You have successfully registered"))
-                                // Navigate to another screen or reset form
+                                _eventFlow.emit(UiEvent.Navigate)
+
                             }
                         }
                         is Resource.Error -> {

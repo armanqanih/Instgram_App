@@ -62,6 +62,10 @@ fun RegisterScreen(
                 is UiEvent.ShowSnakeBar -> {
                     scaffoldState.snackbarHostState.showSnackbar(message = event.message)
                 }
+
+                UiEvent.Navigate -> {
+                    navController.navigate(ScreensNavigation.LoginScreen.route)
+                }
             }
         }
     }
@@ -157,6 +161,7 @@ fun RegisterScreen(
                         }
                         else -> ""
                     },
+                    isPasswordVisible = passwordState.isPasswordVisible,
                     onPasswordToggleClick = {
                         viewModel.onEvent(RegisterEvent.IsPasswordVisibility)
                     },
