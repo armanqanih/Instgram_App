@@ -16,7 +16,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.Check
-import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
@@ -40,8 +39,8 @@ import org.lotka.xenonx.presentation.screen.edit_profile.compose.Chip
 import org.lotka.xenonx.presentation.util.Dimension.SpaceLarge
 import org.lotka.xenonx.presentation.util.Dimension.SpaceMedium
 import org.lotka.xenonx.presentation.util.Dimension.profilePictureSizeLarge
-import org.lotka.xenonx.presentation.util.error.EditProfileError
-import org.lotka.xenonx.presentation.util.state.StandardTextFieldState
+import org.lotka.xenonx.domain.util.error.EditProfileError
+import org.lotka.xenonx.domain.util.state.StandardTextFieldState
 import kotlin.random.Random
 
 

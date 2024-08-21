@@ -1,4 +1,4 @@
-package org.lotka.xenonx.presentation.util
+package org.lotka.xenonx.domain.util
 
 object Constants {
 

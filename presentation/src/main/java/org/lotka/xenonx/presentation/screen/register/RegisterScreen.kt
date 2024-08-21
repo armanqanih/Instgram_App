@@ -32,15 +32,17 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import org.lotka.xenonx.domain.util.Constants.MIN_PASSWORD_LENGTH
+import org.lotka.xenonx.domain.util.Constants.MIN_USERNAME_LENGTH
+import org.lotka.xenonx.domain.util.error.AuthError
 import org.lotka.xenonx.presentation.R
 import org.lotka.xenonx.presentation.composable.StandardTextField
 import org.lotka.xenonx.presentation.ui.navigation.ScreensNavigation
-import org.lotka.xenonx.presentation.util.Constants.MIN_PASSWORD_LENGTH
-import org.lotka.xenonx.presentation.util.Constants.MIN_USERNAME_LENGTH
+
 import org.lotka.xenonx.presentation.util.Dimension.SpaceLarge
 import org.lotka.xenonx.presentation.util.Dimension.SpaceMedium
 import org.lotka.xenonx.presentation.util.UiEvent
-import org.lotka.xenonx.presentation.util.error.AuthError
+
 
 @Composable
 fun RegisterScreen(
@@ -211,7 +213,7 @@ fun RegisterScreen(
 
             val signUpText = buildAnnotatedString {
                 append(stringResource(R.string.already_have_an_account))
-                append(" ")
+                append("")
                 withStyle(style = SpanStyle(MaterialTheme.colors.primary)) {
                     append(stringResource(R.string.Login))
                 }

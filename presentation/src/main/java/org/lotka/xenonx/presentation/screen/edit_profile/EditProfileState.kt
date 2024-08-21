@@ -1,6 +1,6 @@
 package org.lotka.xenonx.presentation.screen.edit_profile
 
-import org.lotka.xenonx.presentation.util.state.StandardTextFieldState
+import org.lotka.xenonx.domain.util.state.StandardTextFieldState
 
 data class EditProfileState(
     val userNameState : StandardTextFieldState = StandardTextFieldState(),
@@ -11,4 +11,4 @@ data class EditProfileState(
 
 
 
-)
+    )

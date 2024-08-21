@@ -16,9 +16,10 @@ import androidx.core.animation.OvershootInterpolator
 import androidx.navigation.NavController
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import org.lotka.xenonx.domain.util.Constants.SPLASH_SCREEN_DURATION
 import org.lotka.xenonx.presentation.R
 import org.lotka.xenonx.presentation.ui.navigation.ScreensNavigation
-import org.lotka.xenonx.presentation.util.Constants.SPLASH_SCREEN_DURATION
+
 
 @Composable
 fun SplashScreen(

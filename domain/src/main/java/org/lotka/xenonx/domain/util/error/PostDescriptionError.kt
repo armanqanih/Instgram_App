@@ -1,4 +1,4 @@
-package org.lotka.xenonx.presentation.util.error
+package org.lotka.xenonx.domain.util.error
 
 sealed class PostDescriptionError :Error() {
 

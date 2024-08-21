@@ -27,11 +27,7 @@ object AppModule {
     ): AuthRepository = AuthRepositoryImpl(firebaseAuth)
 
 
-//    @Provides
-//    @Singleton
-//    fun provide(context: Context): SharedPreferences {
-//        return context.getSharedPreferences(MY_APP_PREFERENCES, Context.MODE_PRIVATE)
-//    }
+
 }
 
 

@@ -1,7 +1,4 @@
-package org.lotka.xenonx.presentation.util.error
-
-
-
+package org.lotka.xenonx.domain.util.error
 
 sealed class AuthError : Error() {
     object FieldEmpty :  AuthError()

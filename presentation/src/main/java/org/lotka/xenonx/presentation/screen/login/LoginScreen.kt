@@ -42,15 +42,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import kotlinx.coroutines.launch
+import org.lotka.xenonx.domain.util.Constants.MIN_PASSWORD_LENGTH
+import org.lotka.xenonx.domain.util.error.AuthError
 import org.lotka.xenonx.presentation.R
 import org.lotka.xenonx.presentation.composable.StandardTextField
 import org.lotka.xenonx.presentation.screen.register.RegisterEvent
 import org.lotka.xenonx.presentation.ui.navigation.ScreensNavigation
-import org.lotka.xenonx.presentation.util.Constants.MIN_PASSWORD_LENGTH
+
 import org.lotka.xenonx.presentation.util.Dimension.SpaceLarge
 import org.lotka.xenonx.presentation.util.Dimension.SpaceMedium
 import org.lotka.xenonx.presentation.util.UiEvent
-import org.lotka.xenonx.presentation.util.error.AuthError
+
 
 @Composable
 fun LoginScreen(

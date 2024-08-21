@@ -31,11 +31,11 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.lotka.xenonx.domain.model.PostModel
+import org.lotka.xenonx.domain.util.Constants.MAX_DESCRIPTION_LINE
 import org.lotka.xenonx.presentation.R
 import org.lotka.xenonx.presentation.theme.HintGray
 import org.lotka.xenonx.presentation.theme.MediumGray
 import org.lotka.xenonx.presentation.theme.TextWhite
-import org.lotka.xenonx.presentation.util.Constants.MAX_DESCRIPTION_LINE
 import org.lotka.xenonx.presentation.util.Dimension.SpaceMedium
 import org.lotka.xenonx.presentation.util.Dimension.SpaceSmall
 import org.lotka.xenonx.presentation.util.Dimension.profilePictureSizeMedium

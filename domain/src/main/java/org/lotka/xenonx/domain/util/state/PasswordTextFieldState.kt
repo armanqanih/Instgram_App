@@ -1,6 +1,7 @@
-package org.lotka.xenonx.presentation.util.state
+package org.lotka.xenonx.domain.util.state
 
-import org.lotka.xenonx.presentation.util.error.Error
+import org.lotka.xenonx.domain.util.error.Error
+
 
 data class PasswordTextFieldState(
     val text : String = "",
