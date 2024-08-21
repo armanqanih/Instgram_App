@@ -20,13 +20,16 @@ class RegisterUserUseCase @Inject constructor(
         val passwordError = ValidationUtil.validatePassword(password)
         val usernameError = ValidationUtil.validateUserName(name)
 
-        val result = repository.registerUser(name,email, password)
+        if (emailError != null || passwordError !=null || usernameError !=null ) {
+            return RegisterResult(
+                emailError = emailError,
+                passwordError = passwordError,
+                userNameError = usernameError)
+            }
 
-        return RegisterResult(
-            emailError = emailError,
-            passwordError = passwordError,
-            userNameError = usernameError,
-            result = result
-        )
+
+        val result = repository.registerUser(name.trim(),email.trim(), password)
+        return RegisterResult(result = result)
+
     }
 }

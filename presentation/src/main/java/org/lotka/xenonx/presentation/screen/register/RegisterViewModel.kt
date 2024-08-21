@@ -83,11 +83,15 @@ class RegisterViewModel @Inject constructor(
 
     private suspend fun register() {
 
-        _state.value = _state.value.copy(isLoading = false)
+        _userNameState.value = _userNameState.value.copy(error = null)
+        _emailState.value = _emailState.value.copy(error = null)
+        _passwordState.value = _passwordState.value.copy(error = null)
 
-        val username = _userNameState.value.text
-        val email = _emailState.value.text
-        val password = _passwordState.value.text
+        _state.value = _state.value.copy(isLoading = true)
+
+        val username = userNameState.value.text
+        val email = emailState.value.text
+        val password = passwordState.value.text
 
         // Call the use case to register the user
         val registerResult = registerUserUseCase(username, email, password)
@@ -106,9 +110,10 @@ class RegisterViewModel @Inject constructor(
                 error = registerResult.passwordError)
         }
 
+
         // If there are no errors, proceed with registration
 
-            _state.value = _state.value.copy(isLoading = true)
+            _state.value = _state.value.copy(isLoading = false)
             try {
                 // Collect the result from the use case
                 registerResult.result?.collect{ result ->
@@ -120,9 +125,7 @@ class RegisterViewModel @Inject constructor(
                                 _eventFlow.emit(UiEvent.ShowSnakeBar("You have successfully registered"))
                                 _eventFlow.emit(UiEvent.Navigate)
                             }
-                            _userNameState.value = StandardTextFieldState()
-                            _emailState.value = StandardTextFieldState()
-                            _passwordState.value = PasswordTextFieldState()
+
 
                         }
                         is Resource.Error -> {
@@ -133,6 +136,9 @@ class RegisterViewModel @Inject constructor(
                         is Resource.Loading -> {
                             // Set loading to true
                             _state.value = _state.value.copy(isLoading = true)
+                        }
+                        null -> {
+                            _state.value = _state.value.copy(isLoading = false)
                         }
                     }
                 }
