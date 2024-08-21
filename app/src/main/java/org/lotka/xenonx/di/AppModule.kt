@@ -1,5 +1,7 @@
 package org.lotka.xenonx.di
 
+import android.content.Context
+import android.content.SharedPreferences
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
@@ -7,6 +9,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.lotka.xenonx.data.repository.AuthRepositoryImpl
 import org.lotka.xenonx.domain.repository.AuthRepository
+import org.lotka.xenonx.presentation.util.TestTag.MY_APP_PREFERENCES
 import javax.inject.Singleton
 
 @Module
@@ -22,5 +25,14 @@ object AppModule {
     fun provideAuthRepository(
         firebaseAuth: FirebaseAuth
     ): AuthRepository = AuthRepositoryImpl(firebaseAuth)
+
+
+//    @Provides
+//    @Singleton
+//    fun provide(context: Context): SharedPreferences {
+//        return context.getSharedPreferences(MY_APP_PREFERENCES, Context.MODE_PRIVATE)
+//    }
 }
+
+
 

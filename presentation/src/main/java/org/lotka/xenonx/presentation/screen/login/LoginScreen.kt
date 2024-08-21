@@ -1,5 +1,6 @@
 package org.lotka.xenonx.presentation.screen.login
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -38,6 +39,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import kotlinx.coroutines.launch
 import org.lotka.xenonx.presentation.R
@@ -61,23 +63,35 @@ fun LoginScreen(
 
     val state = viewModel.state.collectAsState().value
     val scaffoldState = rememberScaffoldState()
+
+    val sharedPreferences = LocalContext.current.getSharedPreferences(
+        "your_app_preferences", Context.MODE_PRIVATE)
+    val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
+
     val scope = rememberCoroutineScope()
 
+
     LaunchedEffect(key1 = true) {
-        viewModel.eventFlow.collect { event ->
-            when (event) {
-                is UiEvent.ShowSnakeBar -> {
-                    scaffoldState.snackbarHostState.showSnackbar(message = event.message)
-                }
-                is UiEvent.Navigate -> {
-                    navController.navigate(ScreensNavigation.HomeScreen.route) {
-                        popUpTo(ScreensNavigation.LoginScreen.route) { inclusive = true }
+        if (viewModel.isUserLoggedIn()) {
+            navController.navigate(ScreensNavigation.HomeScreen.route) {
+                popUpTo(ScreensNavigation.LoginScreen.route) { inclusive = true }
+            }
+        } else {
+            viewModel.eventFlow.collect { event ->
+                when (event) {
+                    is UiEvent.ShowSnakeBar -> {
+                        scaffoldState.snackbarHostState.showSnackbar(message = event.message)
+                    }
+                    is UiEvent.Navigate -> {
+                        viewModel.saveLoginStatus(true)
+                        navController.navigate(ScreensNavigation.HomeScreen.route) {
+                            popUpTo(ScreensNavigation.LoginScreen.route) { inclusive = true }
+                        }
                     }
                 }
             }
         }
     }
-
 
 
 
@@ -174,9 +188,17 @@ fun LoginScreen(
                                passwordState.text.isNotEmpty()
 
                 ) {
+                    val textColor = if (emailState.text.isNotEmpty() && passwordState.text.isNotEmpty()) {
+                        Color.Black
+                    } else {
+                        Color.White
+                    }
+
                     Text(
                         text = stringResource(R.string.Login),
                         style = MaterialTheme.typography.body1,
+                        color = textColor
+
                     )
                 }
 

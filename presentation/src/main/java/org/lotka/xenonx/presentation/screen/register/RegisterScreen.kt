@@ -185,9 +185,17 @@ fun RegisterScreen(
                                && usernameState.text.isNotEmpty()
                                && passwordState.text.isNotEmpty()
                 ) {
+                    val textColor = if (emailState.text.isNotEmpty() &&
+                        usernameState.text.isNotEmpty() &&
+                        passwordState.text.isNotEmpty()) {
+                        Color.Black
+                    } else {
+                        Color.White
+                    }
                     Text(
                         text = stringResource(R.string.register),
                         style = MaterialTheme.typography.body1,
+                        color = textColor
                     )
                 }
 

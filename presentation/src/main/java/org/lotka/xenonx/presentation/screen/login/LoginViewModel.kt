@@ -1,5 +1,6 @@
 package org.lotka.xenonx.presentation.screen.login
 
+import android.content.SharedPreferences
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,6 +14,7 @@ import org.lotka.xenonx.domain.usecase.LoginUserUseCase
 import org.lotka.xenonx.domain.util.Resource
 import org.lotka.xenonx.presentation.util.Constants.MIN_PASSWORD_LENGTH
 import org.lotka.xenonx.presentation.util.Constants.MIN_USERNAME_LENGTH
+import org.lotka.xenonx.presentation.util.TestTag.IS_LOGIN_PREFERENCES
 
 import org.lotka.xenonx.presentation.util.UiEvent
 import org.lotka.xenonx.presentation.util.error.AuthError
@@ -23,7 +25,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-  private val loginUseCase: LoginUserUseCase
+  private val loginUseCase: LoginUserUseCase,
+  private val sharedPreferences: SharedPreferences
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(LoginState())
@@ -38,6 +41,14 @@ class LoginViewModel @Inject constructor(
 
     private val _passwordState = MutableStateFlow(PasswordTextFieldState())
     val passwordState = _passwordState.asStateFlow()
+
+    fun saveLoginStatus(isLoggedIn: Boolean) {
+        sharedPreferences.edit().putBoolean(IS_LOGIN_PREFERENCES, isLoggedIn).apply()
+    }
+
+    fun isUserLoggedIn(): Boolean {
+        return sharedPreferences.getBoolean(IS_LOGIN_PREFERENCES, false)
+    }
 
 
 
@@ -101,6 +112,7 @@ class LoginViewModel @Inject constructor(
                             _state.value = _state.value.copy(isLoading = false)
                             result.data?.let {
                                 // Emit an event for successful login
+                                saveLoginStatus(true)
                                 _eventFlow.emit(UiEvent.Navigate)
                             }
                         }
