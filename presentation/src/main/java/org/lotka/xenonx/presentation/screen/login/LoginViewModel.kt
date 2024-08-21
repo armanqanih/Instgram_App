@@ -18,6 +18,7 @@ import org.lotka.xenonx.presentation.util.UiEvent
 import org.lotka.xenonx.presentation.util.error.AuthError
 import org.lotka.xenonx.presentation.util.state.PasswordTextFieldState
 import org.lotka.xenonx.presentation.util.state.StandardTextFieldState
+import java.util.regex.Pattern
 import javax.inject.Inject
 
 @HiltViewModel
@@ -133,24 +134,27 @@ class LoginViewModel @Inject constructor(
 
     private fun validateEmail(email: String) {
         val trimmedEmail = email.trim()
+        val emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$"
+
         if (trimmedEmail.isBlank()) {
-            _emailState.value = _emailState.value.copy(
-                error = AuthError.FieldEmpty
-            )
+            _emailState.value = _emailState.value.copy(error = AuthError.FieldEmpty)
             return
         }
-        if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailState.value = _emailState.value.copy(
-                error = AuthError.InvalidEmail
-            )
+
+        if (!Pattern.compile(emailRegex).matcher(trimmedEmail).matches()) {
+            _emailState.value = _emailState.value.copy(error = AuthError.InvalidEmail)
             return
         }
-        _emailState.value = _emailState.value.copy(
-            error = null
-        )
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            _emailState.value = _emailState.value.copy(error = AuthError.InvalidEmail)
+            return
+        }
 
 
+        _emailState.value = _emailState.value.copy(error = null)
     }
+
+
 
     private fun validatePassword(password: String) {
         if (password.isBlank()) {

@@ -1,13 +1,14 @@
 {
   "project_info": {
-    "project_number": "805563486143",
-    "project_id": "chat-app-a3915",
-    "storage_bucket": "chat-app-a3915.appspot.com"
+    "project_number": "284317039218",
+    "firebase_url": "https://instagramchat-e3c3c-default-rtdb.firebaseio.com",
+    "project_id": "instagramchat-e3c3c",
+    "storage_bucket": "instagramchat-e3c3c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:805563486143:android:e071727987d706bd165b0a",
+        "mobilesdk_app_id": "1:284317039218:android:effbf34d334fd5fa5e60eb",
         "android_client_info": {
           "package_name": "org.lotka.xenonx"
         }
@@ -15,7 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDiOU4d_pICWkmFDemeCDkC3rdGLhVFDnE"
+          "current_key": "AIzaSyBOm0QEh7h_xSFrQVggEv3XVyWie5_e0ZQ"
         }
       ],
       "services": {

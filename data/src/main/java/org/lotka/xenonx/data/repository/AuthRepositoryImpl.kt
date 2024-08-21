@@ -17,7 +17,10 @@ class AuthRepositoryImpl @Inject constructor(
             try {
                 emit(Resource.Loading()) // Emit loading state
                 val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
-                emit(Resource.Success(result)) // Emit success state
+                if (result.user != null) {
+//                    result.user?.sendEmailVerification()?.await()
+                     emit(Resource.Success(result)) // Emit success state
+                }
             } catch (e: Exception) {
                 emit(Resource.Error(e.localizedMessage ?: "Unknown Error")) // Emit error state
             }
