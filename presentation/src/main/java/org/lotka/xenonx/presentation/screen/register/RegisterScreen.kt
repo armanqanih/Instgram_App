@@ -199,6 +199,8 @@ fun RegisterScreen(
                         style = MaterialTheme.typography.body1,
                         color = textColor
                     )
+
+
                 }
 
                 if (state.isLoading) {

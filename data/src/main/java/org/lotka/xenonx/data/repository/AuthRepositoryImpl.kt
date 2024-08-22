@@ -2,13 +2,11 @@ package org.lotka.xenonx.data.repository
 
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import ir.pinto.market.data.R
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
-import org.lotka.xenonx.domain.repository.AuthRepository
+import org.lotka.xenonx.domain.repository.auth.AuthRepository
 import org.lotka.xenonx.domain.util.Resource
-import org.lotka.xenonx.domain.util.UiText
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(

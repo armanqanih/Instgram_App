@@ -4,6 +4,7 @@ package org.lotka.xenonx.presentation.screen.post
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -11,9 +12,11 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.hilt.navigation.compose.hiltViewModel
 
 import androidx.navigation.NavController
 import org.lotka.xenonx.domain.model.PostModel
@@ -27,7 +30,11 @@ import org.lotka.xenonx.presentation.ui.navigation.ScreensNavigation
 @Composable
 fun PostScreen(
     navController: NavController,
+    viewModel: PostViewModel = hiltViewModel()
 ){
+
+    val state = viewModel.state.collectAsState().value
+
     Column(modifier = Modifier.fillMaxSize()) {
         StandardToolBar(
             navController = navController,
@@ -53,23 +60,17 @@ fun PostScreen(
 
         )
 
-
-
-        PostItem(
-            postModel = PostModel(
-                id = 1,
-                userName = "Arman Sherwamii",
-                profileImage = "",
-                postImage = "",
-                description = "ahahaha",
-                likes = 17,
-                comments = 7,
-
-            ),
-            onPostClick = {
-                navController.navigate(ScreensNavigation.PostDetailScreen.route)
+        LazyColumn {
+            items(state.posts.size) { index ->
+                val post = state.posts[index]
+                PostItem(
+                    postModel = post,
+                    onPostClick = {
+                        navController.navigate(ScreensNavigation.PostDetailScreen.route + "/${post.id}")
+                    }
+                )
             }
-        )
+        }
 
 
     }

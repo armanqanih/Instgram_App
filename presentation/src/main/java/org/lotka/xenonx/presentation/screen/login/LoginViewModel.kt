@@ -1,7 +1,6 @@
 package org.lotka.xenonx.presentation.screen.login
 
 import android.content.SharedPreferences
-import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,10 +9,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.lotka.xenonx.domain.usecase.LoginUserUseCase
-import org.lotka.xenonx.domain.util.Constants.MIN_PASSWORD_LENGTH
+import org.lotka.xenonx.domain.usecase.auth.LoginUserUseCase
 import org.lotka.xenonx.domain.util.Resource
-import org.lotka.xenonx.domain.util.error.AuthError
 
 import org.lotka.xenonx.presentation.util.TestTag.IS_LOGIN_PREFERENCES
 
@@ -21,13 +18,12 @@ import org.lotka.xenonx.presentation.util.UiEvent
 
 import org.lotka.xenonx.domain.util.state.PasswordTextFieldState
 import org.lotka.xenonx.domain.util.state.StandardTextFieldState
-import java.util.regex.Pattern
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-  private val loginUseCase: LoginUserUseCase,
-  private val sharedPreferences: SharedPreferences
+    private val loginUseCase: LoginUserUseCase,
+    private val sharedPreferences: SharedPreferences
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(LoginState())

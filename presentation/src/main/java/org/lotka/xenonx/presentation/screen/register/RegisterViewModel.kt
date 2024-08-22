@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.lotka.xenonx.domain.usecase.RegisterUserUseCase
+import org.lotka.xenonx.domain.usecase.auth.RegisterUserUseCase
 import org.lotka.xenonx.domain.util.Resource
 import org.lotka.xenonx.presentation.util.UiEvent
 import org.lotka.xenonx.domain.util.state.PasswordTextFieldState

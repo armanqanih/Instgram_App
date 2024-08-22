@@ -10,6 +10,11 @@ object Constants {
 
     const val MIN_PASSWORD_LENGTH = 3
 
+    const val PAGE_SIZE_Post = 20
+
+
+    const val JWT_TOKEN = "JWT_TOKEN"
+
 
 
 }

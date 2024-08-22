@@ -1,4 +1,4 @@
-package org.lotka.xenonx.domain.repository
+package org.lotka.xenonx.domain.repository.auth
 
 import com.google.firebase.auth.AuthResult
 import kotlinx.coroutines.flow.Flow

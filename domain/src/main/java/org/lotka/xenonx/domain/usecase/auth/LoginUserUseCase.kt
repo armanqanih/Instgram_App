@@ -1,10 +1,6 @@
-package org.lotka.xenonx.domain.usecase
+package org.lotka.xenonx.domain.usecase.auth
 
-import com.google.firebase.auth.AuthResult
-import kotlinx.coroutines.flow.Flow
-import org.lotka.xenonx.domain.repository.AuthRepository
-import org.lotka.xenonx.domain.util.Resource
-import org.lotka.xenonx.domain.util.ValidationUtil
+import org.lotka.xenonx.domain.repository.auth.AuthRepository
 import org.lotka.xenonx.domain.util.error.AuthError
 import org.lotka.xenonx.domain.util.result.LoginResult
 import javax.inject.Inject

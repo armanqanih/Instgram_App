@@ -1,6 +1,6 @@
-package org.lotka.xenonx.domain.usecase
+package org.lotka.xenonx.domain.usecase.auth
 
-import org.lotka.xenonx.domain.repository.AuthRepository
+import org.lotka.xenonx.domain.repository.auth.AuthRepository
 import org.lotka.xenonx.domain.util.result.RegisterResult
 import org.lotka.xenonx.domain.util.ValidationUtil
 import javax.inject.Inject
