@@ -1,15 +1,8 @@
 package org.lotka.xenonx.domain.usecase
 
-import android.util.Patterns
-import com.google.firebase.auth.AuthResult
-import kotlinx.coroutines.flow.Flow
 import org.lotka.xenonx.domain.repository.AuthRepository
-import org.lotka.xenonx.domain.util.Constants.MIN_USERNAME_LENGTH
-import org.lotka.xenonx.domain.util.error.RegisterResult
-import org.lotka.xenonx.domain.util.Resource
+import org.lotka.xenonx.domain.util.result.RegisterResult
 import org.lotka.xenonx.domain.util.ValidationUtil
-import org.lotka.xenonx.domain.util.error.AuthError
-import java.util.regex.Pattern
 import javax.inject.Inject
 
 class RegisterUserUseCase @Inject constructor(

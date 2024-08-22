@@ -137,9 +137,7 @@ fun LoginScreen(
                         is AuthError.FieldEmpty -> {
                             stringResource(R.string.this_field_cant_be_empty)
                         }
-                        is AuthError.InvalidEmail ->{
-                            stringResource(R.string.not_a_vaild_email)
-                        }
+
                         null -> ""
                         else -> {""}
                     }
@@ -160,12 +158,6 @@ fun LoginScreen(
                         is AuthError.FieldEmpty -> {
                             stringResource(R.string.this_field_cant_be_empty)
                         }
-                        is AuthError.InputTooShort ->{
-                            stringResource(R.string.input_too_short, MIN_PASSWORD_LENGTH)
-                        }
-                        is AuthError.InvalidPassword -> {
-                            stringResource(R.string.validate_password)
-                        }
                         else -> ""
                     },
                     isPasswordVisible = passwordState.isPasswordVisible,
@@ -178,7 +170,6 @@ fun LoginScreen(
                 Button(
                     onClick = {
                         viewModel.onEvent(LoginEvent.Login)
-//                              navController.navigate(ScreensNavigation.HomeScreen.route)
                               },
                     modifier = Modifier
                         .height(50.dp)

@@ -68,7 +68,9 @@ class LoginViewModel @Inject constructor(
                 }
             }
             is LoginEvent.Login -> {
-                validateAndRegisterUser()
+                viewModelScope.launch {
+                    login()
+                }
             }
 
             LoginEvent.IsPasswordVisibility -> {
@@ -80,58 +82,66 @@ class LoginViewModel @Inject constructor(
     }
 
 
-    private fun validateAndRegisterUser() {
-        val email = _emailState.value.text
-        val password = _passwordState.value.text
+    private suspend fun login() {
+        _emailState.value = _emailState.value.copy(error = null)
+        _passwordState.value = _passwordState.value.copy(error = null)
 
-        validateEmail(email)
-        validatePassword(password)
+        _state.value = _state.value.copy(isLoading = true)
 
-        if (_emailState.value.error == null &&
-            _passwordState.value.error == null
-        ) {
-            loginUser(email, password)
 
+        val email = emailState.value.text
+        val password = passwordState.value.text
+
+        // Call the use case to register the user
+        val loginResult = loginUseCase(email, password)
+
+        // Update the UI with potential errors
+
+        if (loginResult.emailError != null) {
+            _emailState.value = _emailState.value.copy(
+                error = loginResult.emailError)
         }
-    }
+        if (loginResult.passwordError != null) {
+            _passwordState.value = _passwordState.value.copy(
+                error = loginResult.passwordError)
+        }
 
+        _state.value = _state.value.copy(isLoading = true)
 
-    private fun loginUser(email: String, password: String) {
-        viewModelScope.launch {
-            _state.value = _state.value.copy(isLoading = true)
-
-            try {
-                // Collect the result from the use case
-                loginUseCase(email, password).collect { result ->
-                    when (result) {
-                        is Resource.Success -> {
-                            _state.value = _state.value.copy(isLoading = false)
-                            result.data?.let {
-                                // Emit an event for successful login
-                                saveLoginStatus(true)
-                                _eventFlow.emit(UiEvent.Navigate)
-                            }
-                        }
-                        is Resource.Error -> {
-                            _state.value = _state.value.copy(isLoading = false)
-                            // If error message contains "no user", show "You don't have an account" message
-                            val errorMessage = if (result.message?.contains("no user") == true) {
-                                "You don't have an account"
-                            } else {
-                                result.message ?: "An unexpected error occurred"
-                            }
-                            _eventFlow.emit(UiEvent.ShowSnakeBar(errorMessage))
-                        }
-                        is Resource.Loading -> {
-                            _state.value = _state.value.copy(isLoading = true)
+        try {
+            // Collect the result from the use case
+            loginUseCase(email, password).result?.collect { result ->
+                when (result) {
+                    is Resource.Success -> {
+                        _state.value = _state.value.copy(isLoading = false)
+                        result.data?.let {
+                            // Emit an event for successful login
+                            saveLoginStatus(true)
+                            _eventFlow.emit(UiEvent.Navigate)
                         }
                     }
+                    is Resource.Error -> {
+                        _state.value = _state.value.copy(isLoading = false)
+                        // If error message contains "no user", show "You don't have an account" message
+                        val errorMessage = if (result.message?.contains("no user") == true) {
+                            "You don't have an account"
+                        } else {
+                            result.message ?: "An unexpected error occurred"
+                        }
+                        _eventFlow.emit(UiEvent.ShowSnakeBar(errorMessage))
+                    }
+                    is Resource.Loading -> {
+                        _state.value = _state.value.copy(isLoading = true)
+                    }
                 }
-            } catch (e: Exception) {
-                _state.value = _state.value.copy(isLoading = false)
-                _eventFlow.emit(UiEvent.ShowSnakeBar("An internal error occurred: ${e.localizedMessage}"))
             }
+        } catch (e: Exception) {
+            _state.value = _state.value.copy(isLoading = false)
+            _eventFlow.emit(UiEvent.ShowSnakeBar("An internal error occurred: ${e.localizedMessage}"))
         }
+
+
+
     }
 
 
@@ -139,57 +149,6 @@ class LoginViewModel @Inject constructor(
 
 
 
-
-    private fun validateEmail(email: String) {
-        val trimmedEmail = email.trim()
-        val emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$"
-
-        if (trimmedEmail.isBlank()) {
-            _emailState.value = _emailState.value.copy(error = AuthError.FieldEmpty)
-            return
-        }
-
-        if (!Pattern.compile(emailRegex).matcher(trimmedEmail).matches()) {
-            _emailState.value = _emailState.value.copy(error = AuthError.InvalidEmail)
-            return
-        }
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailState.value = _emailState.value.copy(error = AuthError.InvalidEmail)
-            return
-        }
-
-
-        _emailState.value = _emailState.value.copy(error = null)
-    }
-
-
-
-    private fun validatePassword(password: String) {
-        if (password.isBlank()) {
-            _passwordState.value = _passwordState.value.copy(
-                error = AuthError.FieldEmpty
-            )
-            return
-        }
-        if (password.length < MIN_PASSWORD_LENGTH) {
-            _passwordState.value = _passwordState.value.copy(
-                error = AuthError.InputTooShort
-            )
-            return
-        }
-        val capitalLetterInPassword = password.any { it.isUpperCase() }
-        val numberInPassword = password.any { it.isDigit() }
-        if (!capitalLetterInPassword || !numberInPassword) {
-            _passwordState.value = _passwordState.value.copy(
-                error = AuthError.InvalidPassword
-            )
-            return
-        }
-
-        _passwordState.value = _passwordState.value.copy(
-            error = null
-        )
-    }
 
 
 
