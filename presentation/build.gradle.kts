@@ -75,6 +75,11 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.activity:activity-compose:1.8.0")
 
+
+    //pagination
+    implementation ("androidx.paging:paging-runtime:3.1.1")
+
+
     //    Collapsing Toolbar
     implementation("me.onebone:toolbar-compose:2.3.5")
 

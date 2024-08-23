@@ -1,6 +1,6 @@
 package org.lotka.xenonx.di
 
-import com.google.firebase.auth.FirebaseAuth
+import org.lotka.xenonx.data.paging.PostSourcePagination
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
@@ -11,7 +11,6 @@ import org.lotka.xenonx.domain.repository.post.PostRepository
 import org.lotka.xenonx.domain.usecase.posts.GetPostsUseCase
 import org.lotka.xenonx.domain.usecase.posts.PostUseCases
 import javax.inject.Singleton
-
 @Module
 @InstallIn(SingletonComponent::class)
 object PostModule {
@@ -22,21 +21,21 @@ object PostModule {
 
     @Provides
     @Singleton
-    fun providePostRepository(
-        firestore: FirebaseFirestore
-    ): PostRepository = PostRepositoryImpl(firestore)
+    fun providePostSourcePagination(firestore: FirebaseFirestore): PostSourcePagination {
+        return PostSourcePagination(firestore)
+    }
 
     @Provides
+    @Singleton
+    fun providePostRepository(
+        pagination: PostSourcePagination
+    ): PostRepository = PostRepositoryImpl(pagination)
+
+    @Provides
+    @Singleton
     fun providePostUseCases(
-        getPostsUseCase: GetPostsUseCase,
-        // add other use cases or dependencies
+        repository: PostRepository
     ): PostUseCases {
-        return PostUseCases(getPostsUseCase)
+        return PostUseCases(GetPostsUseCase(repository))
     }
 }
-
-
-
-
-
-

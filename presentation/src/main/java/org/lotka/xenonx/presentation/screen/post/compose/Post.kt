@@ -124,17 +124,14 @@ fun PostItem(
                         text = stringResource(R.string.liked_by_x_people,postModel.likes)
                         , style = MaterialTheme.typography.body2
                         , color = TextWhite,
-                        fontSize = 16.sp
-                        ,modifier = Modifier.padding(start =SpaceSmall)
-
-                    )
+                          fontSize = 16.sp
+                        ,modifier = Modifier.padding(start =SpaceSmall))
 
                     Text(
                         text = stringResource(R.string.comment ,postModel.comments)
                         , style = MaterialTheme.typography.body2
                         , color = TextWhite,
-                          fontSize = 16.sp
-                    )
+                          fontSize = 16.sp)
                 }
 
             }
