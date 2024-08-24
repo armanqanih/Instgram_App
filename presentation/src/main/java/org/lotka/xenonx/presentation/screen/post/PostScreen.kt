@@ -24,7 +24,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 
 import androidx.navigation.NavController
@@ -85,18 +87,25 @@ fun PostScreen(
 
        }
 
+       if (posts.itemCount == 0) {
+           Text(
+               "No posts found",
+               fontWeight = FontWeight.Bold,
+               fontSize = 24.sp,
+               textAlign = TextAlign.Center,
+               modifier = Modifier.align(Alignment.Center)
+           )
+       }
+
        LazyColumn {
-           if (posts.itemCount == 0) {
-               item {
-                   Text("No posts found")
-               }
+
                items(posts.itemCount) { index ->
                    val post = posts[index]
                    post?.let {postModel->
                        PostItem(postModel = postModel)
                    }
                }
-           }
+
            item {
                 if (state.isLoadingNewPosts) {
                    CircularProgressIndicator(
