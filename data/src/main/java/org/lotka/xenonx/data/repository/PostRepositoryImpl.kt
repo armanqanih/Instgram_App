@@ -1,6 +1,7 @@
 package org.lotka.xenonx.data.repository
 
 import android.net.Uri
+import android.util.Log
 import org.lotka.xenonx.data.paging.PostSourcePagination
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -35,15 +36,30 @@ class PostRepositoryImpl @Inject constructor(
     }
 
     override suspend fun uploadImage(imageUri: Uri): String {
-        println("My PrintLn Upload Image")
-        val storageRef = FirebaseStorage.getInstance().reference
+        val storageRef = firebaseStorage.reference
         val imageRef = storageRef.child("images/${UUID.randomUUID()}")
+
         return try {
-            imageRef.putFile(imageUri).await() // Upload file
-            imageRef.downloadUrl.await().toString() // Get download URL
+            // Start the file upload
+            val uploadTask = imageRef.putFile(imageUri)
+
+            // Listen for success and failure
+            uploadTask.addOnSuccessListener {
+                Log.i("My PrintLn 1", "Upload successful")
+            }.addOnFailureListener { exception ->
+                Log.e("My PrintLn 3", "Error during upload: ${exception.message}")
+                Log.e("My PrintLn 3", "HTTP Result Code: ${exception.javaClass.name}")
+                exception.printStackTrace()
+            }.await()  // Await until upload completes
+
+            // After a successful upload, get the download URL
+            val downloadUrl = imageRef.downloadUrl.await().toString()
+            Log.i("My PrintLn 2", "Download URL: $downloadUrl")
+            downloadUrl
 
         } catch (e: Exception) {
-            throw e
+            Log.e("My PrintLn 3", "Error: ${e.message}")
+            throw e  // Rethrow the exception to handle it further up the chain
         }
     }
 

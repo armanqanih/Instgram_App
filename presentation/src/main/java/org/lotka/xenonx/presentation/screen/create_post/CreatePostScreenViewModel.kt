@@ -1,6 +1,8 @@
 package org.lotka.xenonx.presentation.screen.create_post
 
+import android.content.Context
 import android.net.Uri
+import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,6 +16,7 @@ import org.lotka.xenonx.domain.usecase.posts.PostUseCases
 import org.lotka.xenonx.domain.util.Resource
 import org.lotka.xenonx.domain.util.state.StandardTextFieldState
 import org.lotka.xenonx.presentation.util.UiEvent
+import java.io.File
 import javax.inject.Inject
 @HiltViewModel
 class CreatePostScreenViewModel @Inject constructor(
@@ -23,11 +26,10 @@ class CreatePostScreenViewModel @Inject constructor(
     private val _state = MutableStateFlow(CreatePostState())
     val state: StateFlow<CreatePostState> = _state.asStateFlow()
 
+    val destinationUri = Uri.EMPTY
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
-
-
 
     fun onEvent(event:CreatePostEvent) {
         when (event) {
@@ -38,13 +40,17 @@ class CreatePostScreenViewModel @Inject constructor(
                 )
             }
 
-            is CreatePostEvent.PickImage -> {
-                _state.value = _state.value.copy(imageUri = event.uri)
-            }
 
             CreatePostEvent.SendPost -> {
                 postContent()
             }
+
+            is CreatePostEvent.CropImage -> {
+                _state.value = _state.value.copy(imageUri = event.cropUri)
+
+            }
+
+
         }
 
     }
@@ -69,8 +75,8 @@ class CreatePostScreenViewModel @Inject constructor(
 
                 when (result) {
                     is Resource.Error -> {
-                        println("My PrintLn 4")
                         _eventFlow.emit(UiEvent.ShowSnakeBar("Oops, something went wrong."))
+                        println("My PrintLn Error")
                     }
 
                     is Resource.Loading -> _state.value = _state.value.copy(isLoading = true)
@@ -79,20 +85,25 @@ class CreatePostScreenViewModel @Inject constructor(
                             result = result.data,
                         )
                         _eventFlow.emit(UiEvent.Navigate)
-                        println("My PrintLn 5")
+                        println("My PrintLn Sucsses")
                     }
 
                     null -> {
                         _eventFlow.emit(UiEvent.ShowSnakeBar("Null result"))
-                        println("My PrintLn 6")
+                        println("My PrintLn result nul")
                     }
                 }
             } else {
                 _eventFlow.emit(UiEvent.ShowSnakeBar("Description or Image cannot be empty."))
-                println("My PrintLn 7")
+                println("My PrintLn Description or Image cannot be empty")
             }
         }
     }
+
+
+
+
+
 
 
 }

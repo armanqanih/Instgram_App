@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -26,23 +27,30 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
 import org.lotka.xenonx.presentation.R
 import org.lotka.xenonx.presentation.composable.StandardTextField
 import org.lotka.xenonx.presentation.composable.StandardToolBar
 import org.lotka.xenonx.presentation.ui.navigation.ScreensNavigation
+import org.lotka.xenonx.presentation.util.CropActivityResultContract
 import org.lotka.xenonx.presentation.util.Dimension.SpaceLarge
 import org.lotka.xenonx.presentation.util.Dimension.SpaceMedium
 import org.lotka.xenonx.presentation.util.Dimension.SpaceSmall
 import org.lotka.xenonx.presentation.util.UiEvent
+import java.io.File
+import java.util.UUID
 
 
 @Composable
@@ -52,15 +60,25 @@ fun CreatePostScreen(
 ){
     val state = viewModel.state.collectAsState().value
     val scaffoldState = rememberScaffoldState()
+    val context = LocalContext.current
+
+
+
+    val cropActivityResultLauncher = rememberLauncherForActivityResult(
+        contract = CropActivityResultContract()
+    ) { uri ->
+        uri?.let {
+            viewModel.onEvent(CreatePostEvent.CropImage(it))
+        }
+    }
 
     val imagePickerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(),
-        onResult = { uri: Uri? ->
-            if (uri != null) {
-                viewModel.onEvent(event = CreatePostEvent.PickImage(uri))
-            }
+        contract = ActivityResultContracts.GetContent()
+    ) { uri ->
+        uri?.let {
+            cropActivityResultLauncher.launch(it)
         }
-    )
+    }
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collect { event ->
@@ -75,6 +93,9 @@ fun CreatePostScreen(
             }
         }
     }
+
+
+
 
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -105,7 +126,8 @@ fun CreatePostScreen(
 
             Box(modifier = Modifier
                 .fillMaxWidth()
-                .aspectRatio(16f/9f)
+                .aspectRatio(16f / 9f)
+                .clip(shape = MaterialTheme.shapes.medium)
                 .border(
                     width = 1.dp,
                     color = MaterialTheme.colors.onBackground,
@@ -118,21 +140,28 @@ fun CreatePostScreen(
                 contentAlignment = Alignment.Center
 
                 ){
-                if (state.imageUri != null) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = stringResource(R.string.add_image),
+                    tint = MaterialTheme.colors.onBackground
+                )
+              state.imageUri?.let {
+                  Image(
+                      painter = rememberImagePainter(
+                          request = ImageRequest.Builder(LocalContext.current)
+                              .data(state.imageUri)
+                              .build()
+                      ),
+                      contentDescription = "Selected Image",
+                      modifier = Modifier.fillMaxSize(),
+                      contentScale = ContentScale.Crop
+                  )
+
+              }
+
                     // If image is selected, display it
-                    Image(
-                        painter = rememberImagePainter(state.imageUri),
-                        contentDescription = "Selected Image",
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-                } else {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = stringResource(R.string.add_image),
-                        tint = MaterialTheme.colors.onBackground
-                    )
-                }
+
+
             }
 
             Spacer(modifier = Modifier.height(SpaceMedium))

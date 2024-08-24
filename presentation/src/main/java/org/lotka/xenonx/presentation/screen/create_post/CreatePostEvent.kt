@@ -5,7 +5,7 @@ import org.lotka.xenonx.domain.util.error.AuthError
 
 sealed class CreatePostEvent {
     data class EnteredDescription(val description: String) : CreatePostEvent()
-    data class PickImage(val uri : Uri?):CreatePostEvent()
+    data class CropImage(val cropUri : Uri?):CreatePostEvent()
     object SendPost : CreatePostEvent()
 
 }

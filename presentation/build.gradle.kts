@@ -76,6 +76,9 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.8.0")
 
 
+    // Cropper
+    implementation("com.github.yalantis:ucrop:2.2.6")
+
     //pagination
     implementation ("androidx.paging:paging-runtime:3.1.1")
 
