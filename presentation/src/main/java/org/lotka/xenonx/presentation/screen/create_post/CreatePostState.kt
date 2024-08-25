@@ -7,6 +7,5 @@ data class CreatePostState(
     val isLoading: Boolean = false,
     val description: StandardTextFieldState =StandardTextFieldState(),
     val error: String? = null,
-    val result: Unit? = null,
     val imageUri : Uri? = null
 )

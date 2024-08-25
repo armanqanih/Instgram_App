@@ -13,8 +13,19 @@ class CreatePostUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(description: String, imageUri: String): Resource<Unit>? {
 
+        if (imageUri == null){
+            return Resource.Error("Image cannot be empty Please pick an image")
+        }
+
+
+        if (description.isBlank()) {
+            return Resource.Error("Description cannot be empty")
+        }
+
+
         val imageUriToString = Uri.parse(imageUri) // Convert String to Uri
         val imageUrl = repository.uploadImage(imageUriToString)
+
          return repository.createPost(description, imageUrl)
 
     }
