@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -22,7 +23,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -48,6 +51,7 @@ import androidx.compose.ui.unit.coerceIn
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
 import me.onebone.toolbar.CollapsingToolbar
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
@@ -67,16 +71,23 @@ import org.lotka.xenonx.presentation.screen.profile.composable.ProfileHeaderSect
 import org.lotka.xenonx.presentation.ui.navigation.ScreensNavigation
 import org.lotka.xenonx.presentation.util.Dimension.SpaceMedium
 import org.lotka.xenonx.presentation.util.Dimension.profilePictureSizeLarge
+import org.lotka.xenonx.presentation.util.UiEvent
 import org.lotka.xenonx.presentation.util.toPx
 import javax.xml.transform.Source
 import kotlin.random.Random
 @Composable
 fun ProfileScreen(
-    navController: NavController,
+    onNavigate: (String) -> Unit = {},
+    onNavigateUp: () -> Unit = {},
     viewModel: ProfileViewModel = hiltViewModel(),
     profilePictureSize : Dp = profilePictureSizeLarge
 ) {
+
+    val scaffoldState = rememberScaffoldState()
+
     var toolbarState = viewModel.toolbarState.collectAsState().value
+    var state = viewModel.state.collectAsState().value
+
     val lazyListState = rememberLazyListState()
     val iconSizeExpanded = 35.dp
     val toolbarHeightCollapsed = 75.dp
@@ -110,6 +121,22 @@ fun ProfileScreen(
         }
     }
 
+
+   LaunchedEffect(key1 = true) {
+       viewModel.eventFlow.collect { event ->
+           when (event) {
+               is UiEvent.ShowSnakeBar -> {
+                   scaffoldState.snackbarHostState.showSnackbar(message = event.message)
+               }
+               is UiEvent.Navigate -> {
+                   onNavigate(ScreensNavigation.EditProfileScreen.route)
+               }
+               }
+       }
+   }
+
+
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -129,18 +156,24 @@ fun ProfileScreen(
             }
 
             item {
-                ProfileHeaderSection(
-                    user = UserModel(
-                        profilePictureUrl = "",
-                        userName = "ArmanSherwanii",
-                        description = "To display numbers in a format similar to " +
-                                "Instagram, where numbers greater than 1,000 are shown as \"1k\", and numbers greater " +
-                                "than 1,000,000 are shown as \"1M\", you can create a function ",
-                        followerCount = 1,
-                        followingCount = 250000,
-                        postCount = 12
+                state.profile?.let { profile ->
+                    ProfileHeaderSection(
+                        user = UserModel(
+                            userId = profile.id,
+                            profilePictureUrl = profile.profileImageUrl,
+                            userName = profile.username,
+                            description = profile.bio,
+                            followerCount = profile.followerCount,
+                            followingCount = profile.followingCount,
+                            postCount = profile.postCount
+                        ),
+                        isOwnProfile = profile.isOwenProfile,
+                        onEditClick = {
+                            onNavigate(ScreensNavigation.EditProfileScreen.route)
+                        }
                     )
-                )
+                }
+
             }
 
             items(20) {
@@ -156,7 +189,7 @@ fun ProfileScreen(
                     ),
                     showProfileImage = false,
                     onPostClick = {
-                        navController.navigate(ScreensNavigation.PostDetailScreen.route)
+                        onNavigate(ScreensNavigation.PostDetailScreen.route)
                     },
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -168,49 +201,65 @@ fun ProfileScreen(
                 .fillMaxWidth()
                 .align(Alignment.TopCenter)
         ) {
-            BannerSeaction(
-                modifier = Modifier.height(
-                    (bannerHeight * toolbarState.expandedRatio).coerceIn(
-                        minimumValue = toolbarHeightCollapsed,
-                        maximumValue = bannerHeight
-                    )
-                ),
-                iconModifier = Modifier.graphicsLayer {
-                    translationY = (1f - toolbarState.expandedRatio) *
-                            -iconCollapsedOffsetY.toPx()
-                }
-            )
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(profilePictureSize)
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.arman),
-                    contentDescription = "",
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .graphicsLayer {
-                            translationY = -profilePictureSize.toPx() / 2f +
-                                    (1f - toolbarState.expandedRatio) * imageCollapsedOffsetY.toPx()
-                            transformOrigin = TransformOrigin(
-                                pivotFractionX = 0.5f,
-                                pivotFractionY = 0f
-                            )
-                            val scale = 0.5f + toolbarState.expandedRatio * 0.5f
-                            scaleX = scale
-                            scaleY = scale
-                        }
-                        .size(profilePictureSize)
-                        .clip(CircleShape)
-                        .border(
-                            width = 1.dp,
-                            color = MaterialTheme.colors.onSurface,
-                            shape = CircleShape
-                        ),
-                    contentScale = ContentScale.Crop
+            state.profile?.let { profile ->
+                BannerSeaction(
+                    modifier = Modifier.height(
+                        (bannerHeight * toolbarState.expandedRatio).coerceIn(
+                            minimumValue = toolbarHeightCollapsed,
+                            maximumValue = bannerHeight
+                        )
+                    ),
+                    iconModifier = Modifier.graphicsLayer {
+                        translationY = (1f - toolbarState.expandedRatio) *
+                                -iconCollapsedOffsetY.toPx()
+                    },
+                    topSkills = profile.topSkillsUrl,
+                    shouldShowGithub = profile.githubUrl != null,
+                    shouldShowLinkedIn = profile.LinkedInUrl != null,
+
                 )
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(profilePictureSize)
+                ) {
+                    Image(
+                        painter = rememberImagePainter(
+                        data = profile.profileImageUrl,
+                            builder = {
+                                crossfade(true)
+                            }
+                        )
+                            ,
+                        contentDescription = "",
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .graphicsLayer {
+                                translationY = -profilePictureSize.toPx() / 2f +
+                                        (1f - toolbarState.expandedRatio) * imageCollapsedOffsetY.toPx()
+                                transformOrigin = TransformOrigin(
+                                    pivotFractionX = 0.5f,
+                                    pivotFractionY = 0f
+                                )
+                                val scale = 0.5f + toolbarState.expandedRatio * 0.5f
+                                scaleX = scale
+                                scaleY = scale
+                            }
+                            .size(profilePictureSize)
+                            .clip(CircleShape)
+                            .border(
+                                width = 1.dp,
+                                color = MaterialTheme.colors.onSurface,
+                                shape = CircleShape
+                            ),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+
             }
+
+
         }
     }
 }

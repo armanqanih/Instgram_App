@@ -2,13 +2,17 @@ package org.lotka.xenonx.di
 
 import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import org.lotka.xenonx.data.repository.AuthRepositoryImpl
+import org.lotka.xenonx.data.repository.ProfileRepositoryImpl
 import org.lotka.xenonx.domain.repository.auth.AuthRepository
+import org.lotka.xenonx.domain.repository.profile.ProfileRepository
 import javax.inject.Singleton
 
 @Module
@@ -21,7 +25,6 @@ object AppModule {
         return context
     }
 
-
     @Provides
     @Singleton
     fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
@@ -33,6 +36,8 @@ object AppModule {
     ): AuthRepository = AuthRepositoryImpl(firebaseAuth)
 
 
+
+}
 
     
 
@@ -66,7 +71,7 @@ object AppModule {
 //
 //    }
 
-}
+
 
 
 

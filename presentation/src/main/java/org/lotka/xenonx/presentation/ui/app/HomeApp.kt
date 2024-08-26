@@ -8,8 +8,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.google.accompanist.pager.ExperimentalPagerApi
 import org.lotka.xenonx.domain.model.PostModel
 import org.lotka.xenonx.presentation.screen.edit_profile.EditProfileScreen
@@ -47,114 +49,159 @@ fun HomeApp(
     ) {
 
 
-        Scaffold(
-            content = { _ ->
-                NavHost(
-                    navController = navController,
-                    startDestination = ScreensNavigation.LoginScreen.route
+    Scaffold(
+        content = { _ ->
+            NavHost(
+                navController = navController,
+                startDestination = ScreensNavigation.LoginScreen.route
+            ) {
+                composable(
+                    route = ScreensNavigation.SplashScreen.route,
                 ) {
-                    composable(
-                        route = ScreensNavigation.SplashScreen.route,
-                    ) {
 
-                        SplashScreen(navController = navController)
-
-                    }
-                    composable(
-                        route = ScreensNavigation.LoginScreen.route,
-                    ) {
-
-                        LoginScreen(navController = navController)
-
-                    }
-                    composable(
-                        route = ScreensNavigation.RegisterScreen.route,
-                    ) {
-
-                        RegisterScreen(navController = navController)
-
-                    }
-                    composable(
-                        route = ScreensNavigation.HomeScreen.route,
-                    ) {
-
-                        HomeScreen()
-
-                    }
-                    composable(
-                        route = ScreensNavigation.PostScreen.route,
-                    ) {
-
-                        PostScreen(navController = navController)
-
-                    }
-                    composable(
-                        route = ScreensNavigation.ChatScreen.route,
-                    ) {
-
-                        ChatScreen(navController = navController)
-
-                    }
-                    composable(
-                        route = ScreensNavigation.ActivityScreen.route,
-                    ) {
-                        ActivityScreen(navController = navController)
-                    }
-
-                    composable(
-                        route = ScreensNavigation.ProfileScreen.route,
-                    ) {
-                        ProfileScreen(navController = navController)
-                    }
-                    composable(
-                        route = ScreensNavigation.CreatePostScreen.route,
-                    ) {
-                        CreatePostScreen(navController = navController)
-                    }
-                    composable(
-                        route = ScreensNavigation.PostDetailScreen.route,
-                    ) {
-                        PostDetailScreen(navController = navController,
-                            postModel = PostModel(
-                                id = 1,
-                                userName = "Arman Sherwamii",
-                                profileImage = "",
-                                postImage = "",
-                                description = "ahahaha",
-                                likes = 17,
-                                comments = 7
-                            )
-                        )
-                    }
-
-                    composable(
-                        route = ScreensNavigation.EditProfileScreen.route,
-                    ) {
-                        EditProfileScreen(navController = navController)
-                    }
-                    composable(
-                        route = ScreensNavigation.SearchScreen.route,
-                    ) {
-                        SearchScreen(navController = navController)
-                    }
-                    composable(
-                        route = ScreensNavigation.CreatePostScreen.route,
-                    ) {
-                        CreatePostScreen(navController = navController)
-                    }
-
-                    composable(
-                        route = ScreensNavigation.PersonListScreen.route,
-                    ) {
-                        PersonListScreen(navController = navController)
-                    }
+                    SplashScreen(navController = navController)
 
                 }
+                composable(
+                    route = ScreensNavigation.LoginScreen.route,
+                ) {
 
-            },
-        )
+                    LoginScreen(
+                        onNavigate = navController::navigate,
+                        onNavigateUp = navController::navigateUp
+                        )
 
-    }
+                }
+                composable(
+                    route = ScreensNavigation.RegisterScreen.route,
+                ) {
+
+                    RegisterScreen(
+                        onNavigate = navController::navigate,
+                        onNavigateUp = navController::navigateUp
+                    )
+
+                }
+                composable(
+                    route = ScreensNavigation.HomeScreen.route,
+                ) {
+
+                    HomeScreen(
+                        onNavigate = navController::navigate,
+                        onNavigateUp = navController::navigateUp
+                    )
+
+                }
+                composable(
+                    route = ScreensNavigation.PostScreen.route,
+                ) {
+
+                    PostScreen(
+                        onNavigate = navController::navigate,
+                        onNavigateUp = navController::navigateUp
+                    )
+
+                }
+                composable(
+                    route = ScreensNavigation.ChatScreen.route,
+                ) {
+
+                    ChatScreen(
+                        onNavigate = navController::navigate,
+                        onNavigateUp = navController::navigateUp
+                    )
+
+                }
+                composable(
+                    route = ScreensNavigation.ActivityScreen.route,
+                ) {
+                    ActivityScreen(
+                        onNavigate = navController::navigate,
+                        onNavigateUp = navController::navigateUp
+                    )
+                }
+
+                composable(
+                    route = ScreensNavigation.ProfileScreen.route+"?userId={userId}",
+                    arguments = listOf(navArgument("userId")
+                    {
+                        type = NavType.StringType
+                        defaultValue = null
+                        nullable = true
+                    })
+                ) {
+                    val userId = it.arguments?.getString("userId")
+                    ProfileScreen(
+                        onNavigate = navController::navigate,
+                        onNavigateUp = navController::navigateUp,
+                    )
+                }
+                composable(
+                    route = ScreensNavigation.CreatePostScreen.route,
+                ) {
+                    CreatePostScreen(
+                        onNavigate = navController::navigate,
+                        onNavigateUp = navController::navigateUp
+                    )
+                }
+                composable(
+                    route = ScreensNavigation.PostDetailScreen.route,
+                ) {
+                    PostDetailScreen(
+                        onNavigate = navController::navigate,
+                        onNavigateUp = navController::navigateUp,
+                        postModel = PostModel(
+                            id = 1,
+                            userName = "Arman Sherwamii",
+                            profileImage = "",
+                            postImage = "",
+                            description = "ahahaha",
+                            likes = 17,
+                            comments = 7
+                        )
+                    )
+                }
+
+                composable(
+                    route = ScreensNavigation.EditProfileScreen.route,
+                ) {
+                    EditProfileScreen(
+                        onNavigate = navController::navigate,
+                        onNavigateUp = navController::navigateUp
+                    )
+                }
+                composable(
+                    route = ScreensNavigation.SearchScreen.route,
+                ) {
+                    SearchScreen(
+                        onNavigate = navController::navigate,
+                        onNavigateUp = navController::navigateUp
+                    )
+                }
+                composable(
+                    route = ScreensNavigation.CreatePostScreen.route,
+                ) {
+                    CreatePostScreen(
+                        onNavigate = navController::navigate,
+                        onNavigateUp = navController::navigateUp
+                    )
+                }
+
+                composable(
+                    route = ScreensNavigation.PersonListScreen.route,
+                ) {
+                    PersonListScreen(
+                        onNavigate = navController::navigate,
+                        onNavigateUp = navController::navigateUp
+                    )
+                }
+
+            }
+
+        },
+    )
+
+}
 
 
 

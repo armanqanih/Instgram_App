@@ -46,7 +46,8 @@ import kotlin.random.Random
 
 @Composable
 fun  EditProfileScreen(
-    navController: NavController,
+    onNavigate: (String) -> Unit = {},
+    onNavigateUp: () -> Unit = {},
     viewModel: EditProfileViewModel = hiltViewModel(),
     profilePictureSize : Dp = profilePictureSizeLarge
 ) {
@@ -57,7 +58,7 @@ fun  EditProfileScreen(
         StandardToolBar(
              modifier = Modifier
                 .fillMaxWidth(),
-            navController = navController,
+            onNavigateUp = onNavigateUp,
             showBackArrow = true
             , title = {
                 Text(text =  stringResource(R.string.edit_profile)

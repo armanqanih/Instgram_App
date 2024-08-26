@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import okio.FileNotFoundException
 import org.lotka.xenonx.domain.model.PostModel
+import org.lotka.xenonx.domain.model.ProfileResponse
 import org.lotka.xenonx.domain.repository.post.PostRepository
 import org.lotka.xenonx.domain.util.Constants.POSTS_PATH
 import org.lotka.xenonx.domain.util.Resource
@@ -48,15 +49,12 @@ class PostRepositoryImpl @Inject constructor(
                 Log.e("UploadDebug", "Invalid Uri scheme: ${imageUri.scheme}")
                 throw IllegalArgumentException("Invalid Uri scheme: ${imageUri.scheme}")
             }
-
             // Upload the file
             val uploadTask = imageRef.putFile(imageUri).await()
-
             // Get the download URL
             val downloadUrl = imageRef.downloadUrl.await().toString()
             Log.i("UploadDebug", "Download URL: $downloadUrl")
             downloadUrl
-
         } catch (e: StorageException) {
             Log.e("UploadDebug", "StorageException during upload: ${e.message}")
             Log.e("UploadDebug", "HTTP Result Code: ${e.httpResultCode}")
@@ -84,6 +82,8 @@ class PostRepositoryImpl @Inject constructor(
             Resource.Error(e.localizedMessage ?: "Unknown Error")
         }
     }
+
+
 }
 
 

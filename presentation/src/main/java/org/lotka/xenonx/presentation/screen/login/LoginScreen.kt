@@ -56,7 +56,8 @@ import org.lotka.xenonx.presentation.util.UiEvent
 
 @Composable
 fun LoginScreen(
-    navController: NavController,
+    onNavigate: (String) -> Unit = {},
+    onNavigateUp: () -> Unit = {},
     viewModel: LoginViewModel = hiltViewModel(),
 ) {
 
@@ -75,9 +76,7 @@ fun LoginScreen(
 
     LaunchedEffect(key1 = true) {
         if (viewModel.isUserLoggedIn()) {
-            navController.navigate(ScreensNavigation.HomeScreen.route) {
-                popUpTo(ScreensNavigation.LoginScreen.route) { inclusive = true }
-            }
+            onNavigate(ScreensNavigation.HomeScreen.route)
         } else {
             viewModel.eventFlow.collect { event ->
                 when (event) {
@@ -86,9 +85,7 @@ fun LoginScreen(
                     }
                     is UiEvent.Navigate -> {
                         viewModel.saveLoginStatus(true)
-                        navController.navigate(ScreensNavigation.HomeScreen.route) {
-                            popUpTo(ScreensNavigation.LoginScreen.route) { inclusive = true }
-                        }
+                        onNavigate(ScreensNavigation.HomeScreen.route)
                     }
                 }
             }
@@ -221,7 +218,7 @@ fun LoginScreen(
                     .align(Alignment.BottomCenter)
                     .padding(bottom = SpaceMedium),
                 onClick = {
-                    navController.navigate(ScreensNavigation.RegisterScreen.route)
+                    onNavigate(ScreensNavigation.RegisterScreen.route)
                 }
             )
         }

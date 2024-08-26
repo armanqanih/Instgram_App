@@ -46,7 +46,8 @@ import org.lotka.xenonx.presentation.util.UiEvent
 
 @Composable
 fun RegisterScreen(
-    navController: NavController,
+    onNavigate: (String) -> Unit = {},
+    onNavigateUp: () -> Unit = {},
     viewModel: RegisterViewModel = hiltViewModel(),
 ) {
 
@@ -65,8 +66,8 @@ fun RegisterScreen(
                     scaffoldState.snackbarHostState.showSnackbar(message = event.message)
                 }
 
-                UiEvent.Navigate -> {
-                    navController.navigate(ScreensNavigation.LoginScreen.route)
+                is UiEvent.Navigate -> {
+                    onNavigate(event.route)
                 }
             }
         }
@@ -228,8 +229,7 @@ fun RegisterScreen(
                     .align(Alignment.BottomCenter)
                     .padding(bottom = SpaceMedium),
                 onClick = {
-                    navController.popBackStack()
-                    navController.navigate(ScreensNavigation.LoginScreen.route)
+                   onNavigate(ScreensNavigation.LoginScreen.route)
                 }
             )
         }

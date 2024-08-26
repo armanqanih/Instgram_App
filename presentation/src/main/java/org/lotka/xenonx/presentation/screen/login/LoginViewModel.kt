@@ -18,6 +18,7 @@ import org.lotka.xenonx.presentation.util.UiEvent
 
 import org.lotka.xenonx.domain.util.state.PasswordTextFieldState
 import org.lotka.xenonx.domain.util.state.StandardTextFieldState
+import org.lotka.xenonx.presentation.ui.navigation.ScreensNavigation
 import javax.inject.Inject
 
 @HiltViewModel
@@ -113,7 +114,7 @@ class LoginViewModel @Inject constructor(
                         result.data?.let {
                             // Emit an event for successful login
                             saveLoginStatus(true)
-                            _eventFlow.emit(UiEvent.Navigate)
+                            _eventFlow.emit(UiEvent.Navigate(ScreensNavigation.HomeScreen.route))
                         }
                     }
                     is Resource.Error -> {

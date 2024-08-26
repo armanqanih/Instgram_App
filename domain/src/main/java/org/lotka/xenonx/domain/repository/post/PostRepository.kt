@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
 import org.lotka.xenonx.domain.model.PostModel
+import org.lotka.xenonx.domain.model.ProfileResponse
 import org.lotka.xenonx.domain.util.Resource
 
 interface PostRepository {
@@ -13,6 +14,8 @@ interface PostRepository {
     suspend fun uploadImage(imageUri: Uri): String
 
     suspend fun createPost(description: String, imageUri: String):  Resource<Unit>?
+
+
 
 
 

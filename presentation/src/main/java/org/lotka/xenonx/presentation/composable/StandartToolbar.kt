@@ -16,7 +16,7 @@ import org.lotka.xenonx.presentation.R
 
 @Composable
 fun StandardToolBar(
-    navController: NavController,
+    onNavigateUp: () -> Unit = {},
     modifier: Modifier = Modifier,
     showBackArrow: Boolean = false,
     navAction: @Composable RowScope.() -> Unit = {},
@@ -28,11 +28,11 @@ fun StandardToolBar(
         navigationIcon = if(showBackArrow) {
             {
                 IconButton(onClick = {
-                    navController.navigateUp()
+                    onNavigateUp()
                 }) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
-                        contentDescription = stringResource(id = R.string.back),
+                        contentDescription = stringResource(R.string.back_arrow),
                         tint = MaterialTheme.colors.onBackground
                     )
                 }

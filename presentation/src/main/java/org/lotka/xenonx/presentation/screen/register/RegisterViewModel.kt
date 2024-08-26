@@ -13,6 +13,7 @@ import org.lotka.xenonx.domain.util.Resource
 import org.lotka.xenonx.presentation.util.UiEvent
 import org.lotka.xenonx.domain.util.state.PasswordTextFieldState
 import org.lotka.xenonx.domain.util.state.StandardTextFieldState
+import org.lotka.xenonx.presentation.ui.navigation.ScreensNavigation
 import javax.inject.Inject
 
 @HiltViewModel
@@ -123,7 +124,7 @@ class RegisterViewModel @Inject constructor(
                             _state.value = _state.value.copy(isLoading = false)
                             result.data?.let {
                                 _eventFlow.emit(UiEvent.ShowSnakeBar("You have successfully registered"))
-                                _eventFlow.emit(UiEvent.Navigate)
+                                _eventFlow.emit(UiEvent.Navigate(ScreensNavigation.LoginScreen.route))
                             }
 
 

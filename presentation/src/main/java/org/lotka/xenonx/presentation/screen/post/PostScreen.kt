@@ -38,12 +38,13 @@ import org.lotka.xenonx.presentation.R
 
 import org.lotka.xenonx.presentation.composable.StandardToolBar
 import org.lotka.xenonx.presentation.screen.post.compose.PostItem
-
+import org.lotka.xenonx.presentation.ui.navigation.ScreensNavigation
 
 
 @Composable
 fun PostScreen(
-    navController: NavController,
+    onNavigate: (String) -> Unit = {},
+    onNavigateUp: () -> Unit = {},
     viewModel: PostViewModel = hiltViewModel()
 ){
     val scaffoldState = rememberScaffoldState()
@@ -54,7 +55,7 @@ fun PostScreen(
 
     Column(modifier = Modifier.fillMaxSize()) {
         StandardToolBar(
-            navController = navController,
+            onNavigateUp = onNavigateUp,
             modifier = Modifier.fillMaxWidth(),
             showBackArrow = true,
             title = {
@@ -65,7 +66,7 @@ fun PostScreen(
             },
             navAction = {
                 IconButton(onClick = {
-
+            onNavigate(ScreensNavigation.SearchScreen.route)
                 }) {
                     Icon(imageVector = Icons.Outlined.Search
                         , contentDescription = "add",
@@ -74,17 +75,14 @@ fun PostScreen(
 
                 }
             }
-
         )
    Box(modifier = Modifier.fillMaxSize()) {
-
        if (state.isLoadingFirstTime) {
            CircularProgressIndicator(
                modifier = Modifier.fillMaxWidth()
                    .padding(16.dp)
                    .align(Alignment.Center)
                    .wrapContentWidth(Alignment.CenterHorizontally))
-
        }
 
        if (posts.itemCount == 0) {

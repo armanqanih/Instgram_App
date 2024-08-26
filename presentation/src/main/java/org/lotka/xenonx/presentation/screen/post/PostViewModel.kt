@@ -39,6 +39,8 @@ class PostViewModel @Inject constructor(
                     isLoadingNewPosts = false
                 )
             }
+
+            else -> {}
         }
     }
 

@@ -62,5 +62,6 @@
     <string name="not_a_vaild_email">Not a vaild email</string>
     <string name="validate_password">Password needs to contain at least one UpperCase letter and one number</string>
     <string name="enter_user_name">Enter User Name</string>
+    <string name="back_arrow">Back Arrow</string>
 
 </resources>

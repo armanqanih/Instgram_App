@@ -26,13 +26,15 @@ import org.lotka.xenonx.presentation.R
 import org.lotka.xenonx.presentation.composable.StandardTextField
 import org.lotka.xenonx.presentation.composable.StandardToolBar
 import org.lotka.xenonx.presentation.composable.item.UserProfileItem
+import org.lotka.xenonx.presentation.ui.navigation.ScreensNavigation
 
 import org.lotka.xenonx.presentation.util.Dimension.SpaceLarge
 import org.lotka.xenonx.presentation.util.Dimension.SpaceMedium
 
 @Composable
 fun SearchScreen(
-    navController: NavController ,
+    onNavigate: (String) -> Unit = {},
+    onNavigateUp: () -> Unit = {},
     viewModel: SearchScreenViewModel = hiltViewModel(),
 ) {
 
@@ -43,7 +45,7 @@ fun SearchScreen(
         StandardToolBar(
             modifier = Modifier
                 .fillMaxWidth(),
-            navController = navController,
+            onNavigateUp = onNavigateUp,
             showBackArrow = true, title = {
                 Text(text = stringResource(R.string.search_for_user),
                     fontWeight = FontWeight.Bold,
@@ -79,14 +81,17 @@ fun SearchScreen(
 
                 items(10){
                     Spacer(modifier = Modifier.height(SpaceMedium))
+
                     UserProfileItem(user = UserModel(
-                        "",
+                        "1",
                         userName = "ArmanSHerwanii",
                         description = "hellow my name is arman how are" +
                                 " you every one"
                     , followingCount = 12,
                         followerCount = 13,
-                        postCount = 0
+                        postCount = 0,
+                        profilePictureUrl = ""
+
                     )
                         , actionItem = {
 
@@ -96,6 +101,9 @@ fun SearchScreen(
 
                         }
                         , onCardClick = {
+                            onNavigate(ScreensNavigation.ProfileScreen.route
+                            + "userId=${1}")
+
 
                         },
                         onActionItemClick = {

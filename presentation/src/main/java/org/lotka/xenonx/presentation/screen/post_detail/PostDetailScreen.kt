@@ -42,7 +42,8 @@ import org.lotka.xenonx.presentation.util.Dimension.profilePictureSizeMedium
 
 @Composable
 fun PostDetailScreen(
-   navController: NavController,
+   onNavigate: (String) -> Unit = {},
+   onNavigateUp: () -> Unit = {},
    postModel: PostModel
 ) {
 
@@ -50,7 +51,7 @@ fun PostDetailScreen(
 
    Column(modifier = Modifier.fillMaxSize()) {
       StandardToolBar(
-         navController = navController,
+        onNavigateUp = onNavigateUp,
          modifier = Modifier.fillMaxWidth(),
          showBackArrow = true,
          title = {

@@ -30,6 +30,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberImagePainter
 import org.lotka.xenonx.presentation.R
 import org.lotka.xenonx.presentation.util.Dimension.SpaceMedium
 import org.lotka.xenonx.presentation.util.Dimension.SpaceSmall
@@ -41,6 +42,10 @@ fun BannerSeaction(
     modifier: Modifier = Modifier,
     iconSize : Dp = 35.dp,
     iconModifier: Modifier = Modifier ,
+    topSkills : List<String> = emptyList(),
+    bannerUrl : String? = null,
+    shouldShowGithub : Boolean = false,
+    shouldShowLinkedIn : Boolean = false,
     onGithubClick : () ->Unit = {},
     onLinkedInClick : () ->Unit = {},
 ) {
@@ -49,12 +54,20 @@ fun BannerSeaction(
             modifier = modifier){
 
 
-            Image(painter = painterResource(id = R.drawable.newbanner) ,
-                contentDescription = stringResource(R.string.banner_image),
-                modifier = Modifier
-                    .fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
+            bannerUrl.let {bannerUrl->
+                Image(painter = rememberImagePainter(
+                    data = bannerUrl,
+                    builder = {
+                        crossfade(true)
+                    }
+                ) ,
+                    contentDescription = stringResource(R.string.banner_image),
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            }
+
 
             Box(modifier = Modifier
                 .fillMaxSize()
@@ -77,17 +90,23 @@ fun BannerSeaction(
 
 
                 ){
-                Spacer(modifier = Modifier.width(SpaceSmall) )
-                Image(painter = painterResource(id = R.drawable.c_sharp_logo),
-                    contentDescription = stringResource(R.string.c_sharp),
-                    modifier = Modifier.height(iconSize)
-                )
-                Spacer(modifier = Modifier.width(SpaceMedium) )
 
-                Image(painter = painterResource(id = R.drawable.kotlin),
-                    contentDescription = stringResource(R.string.kotlin),
-                    modifier = Modifier.height(iconSize)
-                )
+                topSkills.forEach {
+                    Spacer(modifier = Modifier.width(SpaceSmall) )
+                    Image(painter = rememberImagePainter(
+                        data = topSkills,
+                        builder = {
+                            crossfade(true) }
+                    ),
+                        contentDescription = null,
+                        modifier = Modifier.height(iconSize)
+                    )
+
+
+
+                }
+
+
 
 
 
@@ -101,25 +120,28 @@ fun BannerSeaction(
 
 
                 ){
+               if (shouldShowGithub){
+                    IconButton(onClick = { onGithubClick() }
+                        , modifier = Modifier.size(iconSize)
 
-                IconButton(onClick = { onGithubClick() }
-                    , modifier = Modifier.size(iconSize)
-
-                ) {
-                    Image(painter = painterResource(id = R.drawable.github),
-                        contentDescription = stringResource(R.string.github),
-
-                        )
+                    ) {
+                        Image(painter = painterResource(id = R.drawable.github),
+                            contentDescription = stringResource(R.string.github),
+                            ) }
                 }
 
-                IconButton(onClick = { onLinkedInClick() }
-                    , modifier = Modifier.size(iconSize)
-                ) {
-                    Image(painter = painterResource(id = R.drawable.linkedin),
-                        contentDescription = stringResource(R.string.linkedin),
+              if (shouldShowLinkedIn){
+                   IconButton(onClick = { onLinkedInClick() }
+                       , modifier = Modifier.size(iconSize)
+                   ) {
+                       Image(painter = painterResource(id = R.drawable.linkedin),
+                           contentDescription = stringResource(R.string.linkedin),
 
-                        )
-                }
+                           ) }
+
+               }
+
+
 
 
 

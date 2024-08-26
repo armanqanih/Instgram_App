@@ -27,7 +27,8 @@ import org.lotka.xenonx.presentation.util.Dimension.SpaceMedium
 
 @Composable
 fun PersonListScreen(
-    navController: NavController ,
+    onNavigate: (String) -> Unit = {},
+    onNavigateUp: () -> Unit = {},
 
 ) {
 
@@ -36,7 +37,7 @@ fun PersonListScreen(
         StandardToolBar(
             modifier = Modifier
                 .fillMaxWidth(),
-            navController = navController,
+            onNavigateUp = onNavigateUp,
             showBackArrow = true, title = {
                 Text(text = stringResource(R.string.like_by),
                     fontWeight = FontWeight.Bold,
@@ -64,8 +65,10 @@ fun PersonListScreen(
                                 " you every one"
                     , followingCount = 12,
                         followerCount = 13,
-                        postCount = 0
+                        postCount = 0,
+                        profilePictureUrl = ""
                     )
+
                         , actionItem = {
 
                             Icon(imageVector =Icons.Default.PersonAdd ,

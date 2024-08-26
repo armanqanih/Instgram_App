@@ -25,6 +25,9 @@ class SearchScreenViewModel @Inject constructor(
                     searchMessage = event.searchMessage
                 )
             }
+
+
+            else -> {}
         }
     }
 

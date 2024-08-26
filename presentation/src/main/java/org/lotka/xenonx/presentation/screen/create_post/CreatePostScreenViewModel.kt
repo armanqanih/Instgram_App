@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 import org.lotka.xenonx.domain.usecase.posts.PostUseCases
 import org.lotka.xenonx.domain.util.Resource
 import org.lotka.xenonx.domain.util.state.StandardTextFieldState
+import org.lotka.xenonx.presentation.ui.navigation.ScreensNavigation
 import org.lotka.xenonx.presentation.util.UiEvent
 import java.io.File
 import javax.inject.Inject
@@ -77,7 +78,7 @@ class CreatePostScreenViewModel @Inject constructor(
 
                 when (result) {
                     is Resource.Success -> {
-                        _eventFlow.emit(UiEvent.Navigate)
+                        _eventFlow.emit(UiEvent.Navigate(ScreensNavigation.HomeScreen.route))
                     }
                     is Resource.Error -> {
                         _eventFlow.emit(UiEvent.ShowSnakeBar(result.message ?: "Unknown error"))

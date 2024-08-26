@@ -12,7 +12,8 @@ import org.lotka.xenonx.presentation.composable.StandardScaffold
 
 @Composable
 fun ChatScreen(
-    navController: NavController,
+    onNavigate: (String) -> Unit = {},
+    onNavigateUp: () -> Unit = {},
 ) {
 
     

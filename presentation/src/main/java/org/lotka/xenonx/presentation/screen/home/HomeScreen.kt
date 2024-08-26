@@ -10,7 +10,8 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun HomeScreen(
-    
+    onNavigate: (String) -> Unit = {},
+    onNavigateUp: () -> Unit = {},
 ){
     
     Column(modifier = Modifier.fillMaxSize()

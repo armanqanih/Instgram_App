@@ -63,7 +63,8 @@ import java.util.UUID
 @OptIn(DelicateCoroutinesApi::class)
 @Composable
 fun CreatePostScreen(
-    navController: NavController,
+    onNavigate :(String) -> Unit = {},
+    onNavigateUp: () -> Unit = {},
     viewModel: CreatePostScreenViewModel = hiltViewModel(),
 ){
     val state = viewModel.state.collectAsState().value
@@ -98,8 +99,8 @@ fun CreatePostScreen(
                     }
                 }
 
-                UiEvent.Navigate -> {
-                    navController.navigate(ScreensNavigation.PostScreen.route)
+                is UiEvent.Navigate -> {
+                    onNavigate(event.route)
                 }
             }
         }
@@ -114,7 +115,7 @@ fun CreatePostScreen(
         StandardToolBar(
             modifier = Modifier
                 .fillMaxWidth(),
-            navController = navController,
+            onNavigateUp = onNavigateUp,
             showBackArrow = false,
             title = {
                 Text(

@@ -24,7 +24,9 @@ import org.lotka.xenonx.presentation.ui.navigation.ScreensNavigation
 @Composable
 fun SplashScreen(
   navController: NavController,
-  dispatcher: CoroutineDispatcher = Dispatchers.Main
+  dispatcher: CoroutineDispatcher = Dispatchers.Main,
+//  onPopBackStack: () -> Unit = {},
+//  onNavigate: (String) -> Unit = {}
 ){
     Box(modifier = Modifier.fillMaxSize()
     , contentAlignment = Alignment.Center

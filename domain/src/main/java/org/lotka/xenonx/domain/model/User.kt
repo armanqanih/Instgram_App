@@ -1,16 +1,19 @@
 package org.lotka.xenonx.domain.model
 
-data class User (
-    val id :String  ,
-    val email : String  ,
+data class ProfileResponse (
+    val id:String ,
     val username : String  ,
-    val password : String  ,
-    val imageUrl : String  ,
+    val profileImageUrl : String  ,
     val bannerUrl : String  ,
     val bio : String  ,
-    val skills : List<String> =  emptyList()  ,
+    val topSkillsUrl : List<String> =  emptyList()  ,
     val githubUrl : String? ,
-    val InstagramUrl : String ?,
-    val LinkedInUrl : String  ?
+    val LinkedInUrl : String  ?,
+    val isOwenProfile : Boolean  ,
+    val isFollowing : Boolean  ,
+    val followingCount : Int  ,
+    val followerCount : Int  ,
+    val postCount : Int
+
 
 )
