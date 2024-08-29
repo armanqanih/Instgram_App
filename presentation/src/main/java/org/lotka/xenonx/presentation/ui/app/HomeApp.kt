@@ -122,15 +122,13 @@ fun HomeApp(
                 }
 
                 composable(
-                    route = ScreensNavigation.ProfileScreen.route+"?userId={userId}",
-                    arguments = listOf(navArgument("userId")
-                    {
+                    route = ScreensNavigation.ProfileScreen.route +"?userId={userId}",
+                    arguments = listOf(navArgument("userId") {
                         type = NavType.StringType
                         defaultValue = null
                         nullable = true
                     })
                 ) {
-                    val userId = it.arguments?.getString("userId")
                     ProfileScreen(
                         onNavigate = navController::navigate,
                         onNavigateUp = navController::navigateUp,
@@ -163,8 +161,11 @@ fun HomeApp(
                 }
 
                 composable(
-                    route = ScreensNavigation.EditProfileScreen.route,
-                ) {
+                    route = ScreensNavigation.EditProfileScreen.route+"?userId={userId}",
+                    arguments = listOf(navArgument("userId")
+                    {
+                        type = NavType.StringType
+                    }) ) {
                     EditProfileScreen(
                         onNavigate = navController::navigate,
                         onNavigateUp = navController::navigateUp

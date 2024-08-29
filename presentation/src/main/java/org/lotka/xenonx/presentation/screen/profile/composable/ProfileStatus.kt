@@ -37,27 +37,26 @@ fun ProfileStats(
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-        user.followerCount?.let {
+
             ProfileNumber(
-                number = it,
+                number = user.followerCount ?: 0,
                 text = stringResource(R.string.follower)
             )
-        }
        Spacer(modifier = Modifier.width(SpaceMedium))
-        user.followingCount?.let {
+
             ProfileNumber(
-                number = it,
+                number = user.followingCount ?: 0,
                 text = stringResource(R.string.following)
             )
-        }
+
         Spacer(modifier = Modifier.width(SpaceMedium))
-        user.postCount?.let {
+
             ProfileNumber(
-                number = it,
+                number = user.postCount ?: 0,
                 text = stringResource(R.string.posts)
             )
-        }
-        if (isOwnProfile){
+
+        if (!isOwnProfile){
             Spacer(modifier = Modifier.width(SpaceMedium))
             Button(onClick = { onFlowClick() }
                 , colors = ButtonDefaults.buttonColors(

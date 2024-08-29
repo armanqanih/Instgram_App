@@ -83,17 +83,18 @@ fun UserProfileItem (
                  verticalArrangement = Arrangement.Center
              ) {
 
-                 Text(text = user.userName
+                 Text(text = user.username
                  , style =  MaterialTheme.typography.body1.copy(
                      fontWeight = FontWeight.Bold
                  ))
                  Spacer(modifier = Modifier.height(SpaceSmall))
 
-                 Text(text = user.description
-                     , style =  MaterialTheme.typography.body2.copy(),
-                     overflow = TextOverflow.Ellipsis,
-                     maxLines = 2,
+                 user.bio?.let {
+                     Text(text = it, style =  MaterialTheme.typography.body2.copy(),
+                         overflow = TextOverflow.Ellipsis,
+                         maxLines = 2,
                      )
+                 }
 
 
              }

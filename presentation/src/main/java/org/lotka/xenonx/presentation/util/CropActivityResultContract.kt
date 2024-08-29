@@ -11,7 +11,10 @@ import org.lotka.xenonx.domain.util.getFileName
 import java.io.File
 import java.util.UUID
 
-class CropActivityResultContract() :ActivityResultContract<Uri,Uri?>() {
+class CropActivityResultContract(
+    private val AspectRatioX: Float,
+    private val AspectRatioY: Float,
+) :ActivityResultContract<Uri,Uri?>() {
 
     override fun createIntent(context: Context, input: Uri): Intent {
         return UCrop.of(input,
@@ -20,7 +23,7 @@ class CropActivityResultContract() :ActivityResultContract<Uri,Uri?>() {
                 context.contentResolver.getFileName(input)
                 ))
         )
-            .withAspectRatio(16f, 9f)
+            .withAspectRatio(AspectRatioX, AspectRatioY)
             .getIntent(context)
 
     }

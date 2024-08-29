@@ -1,18 +1,16 @@
 package org.lotka.xenonx.presentation.screen.profile.composable
 
-import android.graphics.drawable.shapes.Shape
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
+
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
+
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -22,9 +20,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -39,7 +35,7 @@ import org.lotka.xenonx.presentation.util.Dimension.profilePictureSizeLarge
 @Composable
 fun ProfileHeaderSection(
     modifier: Modifier = Modifier,
-    isOwnProfile : Boolean = true ,
+    isOwnProfile : Boolean? = true ,
     user: UserModel,
     onEditClick : () -> Unit = {}
 ){
@@ -58,19 +54,18 @@ fun ProfileHeaderSection(
         Row (
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.offset(x =
-            if (isOwnProfile)
-            (30.dp + SpaceSmall) /2
+            if (isOwnProfile == true) (30.dp + SpaceSmall) /2
             else 0.dp
             )
         ){
             Text(
-                text = user.userName,
+                text = user.username,
                 style = MaterialTheme.typography.h1.copy(
                     fontSize = 24.sp
                 ),
                 textAlign = TextAlign.Center
             )
-            if (isOwnProfile){
+            if (isOwnProfile == true){
                 Spacer(modifier = Modifier.width(SpaceSmall))
 
 
@@ -85,13 +80,15 @@ fun ProfileHeaderSection(
 
         }
         Spacer(modifier = Modifier.height(SpaceMedium))
-        if (user.description.isNotBlank()){
+
+        user.bio?.let {
             Text(
-                text = user.description,
+                text = it,
                 style = MaterialTheme.typography.body2,
                 textAlign = TextAlign.Center
 
             )
+        }
         }
 
         Spacer(modifier = Modifier.height(SpaceLarge))
@@ -100,4 +97,3 @@ fun ProfileHeaderSection(
 
     }
 
-}

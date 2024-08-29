@@ -11,15 +11,15 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageException
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+
 import kotlinx.coroutines.tasks.await
-import okio.FileNotFoundException
+
 import org.lotka.xenonx.domain.model.PostModel
-import org.lotka.xenonx.domain.model.ProfileResponse
+
 import org.lotka.xenonx.domain.repository.post.PostRepository
-import org.lotka.xenonx.domain.util.Constants.POSTS_PATH
+
 import org.lotka.xenonx.domain.util.Resource
-import java.io.File
+
 import java.util.UUID
 import javax.inject.Inject
 
@@ -73,13 +73,17 @@ class PostRepositoryImpl @Inject constructor(
             val post = mapOf(
                 "description" to description,
                 "imageUrl" to imageUri,
-                "timestamp" to FieldValue.serverTimestamp()
+                "timestamp" to FieldValue.serverTimestamp(),  // Auto-generates a timestamp on Firestore
+                "likesCount" to 0,  // Initialize the number of likes
+                "commentsCount" to 0  // Initialize the number of comments
             )
-            firestore.collection("posts").add(post).await()
-            println("My PrintLn create post")
+            firestore.collection("PostModel").add(post).await()
+            Log.i("PostDebug", "Post created successfully.")
             Resource.Success(Unit)
         } catch (e: Exception) {
+            Log.e("PostDebug", "Error creating post: ${e.localizedMessage}")
             Resource.Error(e.localizedMessage ?: "Unknown Error")
+
         }
     }
 

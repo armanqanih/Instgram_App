@@ -6,4 +6,5 @@ data class SearchState(
     val searchMessage : String = "",
     val users : List<UserModel> = emptyList(),
 
+
     )

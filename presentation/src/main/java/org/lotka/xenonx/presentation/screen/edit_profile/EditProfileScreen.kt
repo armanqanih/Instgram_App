@@ -1,5 +1,7 @@
 package org.lotka.xenonx.presentation.screen.edit_profile
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,11 +18,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -29,6 +34,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 import org.lotka.xenonx.presentation.R
@@ -41,6 +49,9 @@ import org.lotka.xenonx.presentation.util.Dimension.SpaceMedium
 import org.lotka.xenonx.presentation.util.Dimension.profilePictureSizeLarge
 import org.lotka.xenonx.domain.util.error.EditProfileError
 import org.lotka.xenonx.domain.util.state.StandardTextFieldState
+import org.lotka.xenonx.presentation.screen.create_post.CreatePostEvent
+import org.lotka.xenonx.presentation.util.CropActivityResultContract
+import org.lotka.xenonx.presentation.util.UiEvent
 import kotlin.random.Random
 
 
@@ -52,6 +63,60 @@ fun  EditProfileScreen(
     profilePictureSize : Dp = profilePictureSizeLarge
 ) {
      val state = viewModel.state.collectAsState().value
+
+    val scaffoldState = rememberScaffoldState()
+
+    LaunchedEffect(key1 = true) {
+
+        viewModel.eventFlow.collect { event ->
+            when(event) {
+                is UiEvent.ShowSnakeBar -> {
+                    scaffoldState.snackbarHostState.showSnackbar(
+                        message = event.message,
+                    )
+                }
+                is UiEvent.Navigate -> {
+                    onNavigate(event.route)
+                }
+                else -> Unit
+            }
+        }
+    }
+
+    val cropProfileImageLauncher = rememberLauncherForActivityResult(
+        contract = CropActivityResultContract(1f,1f)
+    ) { uri ->
+        uri?.let {
+            viewModel.onEvent(EditProfileEvent.CropProfilePicture(it))
+        }
+    }
+    val cropBannerImageLauncher = rememberLauncherForActivityResult(
+        contract = CropActivityResultContract(5f,2f)
+    ) { uri ->
+        uri?.let {
+            viewModel.onEvent(EditProfileEvent.CropBannerImage(it))
+        }
+    }
+
+    val ProfilePictuerGalleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri ->
+        uri?.let {
+            cropProfileImageLauncher.launch(it)
+        }
+    }
+
+    val BannerPictuerGalleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri ->
+        uri?.let {
+            cropBannerImageLauncher.launch(it)
+        }
+    }
+
+
+
+
 
     Column(modifier = Modifier.fillMaxSize()) {
 
@@ -65,12 +130,10 @@ fun  EditProfileScreen(
                     , fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colors.onBackground
                 )
-
-
             },
             navAction = {
                 IconButton(onClick = {
-
+                    viewModel.onEvent(EditProfileEvent.UpdateProfile)
                 }) {
                     Icon(imageVector = Icons.Outlined.Check
                         , contentDescription = stringResource(R.string.save_changes),
@@ -91,11 +154,25 @@ fun  EditProfileScreen(
         ) {
 
             BannerEditSection(
-                banner = painterResource(id =R.drawable.newbanner ) ,
-                profileImage = painterResource(id = R.drawable.arman)
+                banner = rememberAsyncImagePainter(
+                    ImageRequest.Builder(LocalContext.current).data(data = state.profile?.bannerUrl)
+                        .apply(block = fun ImageRequest.Builder.() {
+                            crossfade(true)
+                        }).build()
+                ),
+                profileImage = rememberAsyncImagePainter(
+                    ImageRequest.Builder(LocalContext.current)
+                        .data(data = state.profile?.profileImageUrl).apply(block = fun ImageRequest.Builder.() {
+                            crossfade(true)
+                        }).build()
+                )
                 , profilePictureSize = profilePictureSize,
-                onProfileImageClick = {},
-                onBannerImageClick = {}
+                onProfileImageClick = {
+                    ProfilePictuerGalleryLauncher.launch("image/*")
+                },
+                onBannerImageClick = {
+                    BannerPictuerGalleryLauncher.launch("image/*")
+                }
 
             )
             Spacer(modifier = Modifier.height(SpaceMedium))
@@ -209,11 +286,10 @@ fun  EditProfileScreen(
                     crossAxisSpacing = SpaceMedium
                 ) {
 
-                    listOf("kotlin","c#","java, c++",
-                        "swift","python","javascript, typescript").forEach {
+                  state.skills .forEach {
                        Chip(
-                           text = it
-                       , isSelected = if(Random.nextInt(2) == 0 ) true else false,
+                           text = it.name
+                       , isSelected = it in state.selectedSkills,
                            onChipClick = {
 
                            }

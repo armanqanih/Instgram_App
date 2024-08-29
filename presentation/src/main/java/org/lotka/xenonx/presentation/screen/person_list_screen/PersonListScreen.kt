@@ -60,13 +60,13 @@ fun PersonListScreen(
                     Spacer(modifier = Modifier.height(SpaceMedium))
                     UserProfileItem(user = UserModel(
                         "",
-                        userName = "ArmanSHerwanii",
-                        description = "hellow my name is arman how are" +
+                        username = "ArmanSHerwanii",
+                        bio = "hellow my name is arman how are" +
                                 " you every one"
-                    , followingCount = 12,
+                    ,   followingCount = 12,
                         followerCount = 13,
                         postCount = 0,
-                        profilePictureUrl = ""
+                        profileImageUrl = ""
                     )
 
                         , actionItem = {

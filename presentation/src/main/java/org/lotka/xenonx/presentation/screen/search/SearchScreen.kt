@@ -81,37 +81,39 @@ fun SearchScreen(
 
                 items(10){
                     Spacer(modifier = Modifier.height(SpaceMedium))
+                     state.users?.let {
+                         UserProfileItem(user = UserModel(
+                             userId = "1",
+                             username = "ArmanSHerwanii",
+                             bio = "hellow my name is arman how are" +
+                                     " you every one"
+                             , followingCount = 12,
+                             followerCount = 13,
+                             postCount = 0,
+                             profileImageUrl = ""
 
-                    UserProfileItem(user = UserModel(
-                        "1",
-                        userName = "ArmanSHerwanii",
-                        description = "hellow my name is arman how are" +
-                                " you every one"
-                    , followingCount = 12,
-                        followerCount = 13,
-                        postCount = 0,
-                        profilePictureUrl = ""
+                         )
+                             , actionItem = {
 
-                    )
-                        , actionItem = {
+                                 Icon(imageVector =Icons.Default.PersonAdd ,
+                                     tint = Color.White,
+                                     contentDescription = "")
 
-                            Icon(imageVector =Icons.Default.PersonAdd ,
-                                tint = Color.White,
-                                contentDescription = "")
-
-                        }
-                        , onCardClick = {
-                            onNavigate(ScreensNavigation.ProfileScreen.route
-                            + "userId=${1}")
+                             }
+                             , onCardClick = {
+                                 onNavigate(ScreensNavigation.ProfileScreen.route
+                                         + "?userId=${"1"}")
 
 
-                        },
-                        onActionItemClick = {
+                             },
+                             onActionItemClick = {
 
-                        },
-                        modifier = Modifier.fillMaxWidth()
+                             },
+                             modifier = Modifier.fillMaxWidth()
 
-                    )
+                         )
+                     }
+
                 }
 
             }

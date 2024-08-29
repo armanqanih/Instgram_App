@@ -31,6 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
+import org.lotka.xenonx.domain.model.Skills
 import org.lotka.xenonx.presentation.R
 import org.lotka.xenonx.presentation.util.Dimension.SpaceMedium
 import org.lotka.xenonx.presentation.util.Dimension.SpaceSmall
@@ -42,7 +43,7 @@ fun BannerSeaction(
     modifier: Modifier = Modifier,
     iconSize : Dp = 35.dp,
     iconModifier: Modifier = Modifier ,
-    topSkills : List<String> = emptyList(),
+    topSkills : List<Skills> = emptyList(),
     bannerUrl : String? = null,
     shouldShowGithub : Boolean = false,
     shouldShowLinkedIn : Boolean = false,
