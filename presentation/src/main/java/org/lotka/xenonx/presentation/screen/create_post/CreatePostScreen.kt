@@ -102,6 +102,8 @@ fun CreatePostScreen(
                 is UiEvent.Navigate -> {
                     onNavigate(event.route)
                 }
+
+                UiEvent.NavigateUp -> TODO()
             }
         }
     }

@@ -47,6 +47,7 @@ import org.lotka.xenonx.presentation.util.toPx
 
 @Composable
 fun ProfileScreen(
+    userId:String,
     onNavigate: (String) -> Unit = {},
     onNavigateUp: () -> Unit = {},
     viewModel: ProfileViewModel = hiltViewModel(),
@@ -93,6 +94,7 @@ fun ProfileScreen(
 
 
    LaunchedEffect(key1 = true) {
+       viewModel.getProfile(userId)
        viewModel.eventFlow.collect { event ->
            when (event) {
                is UiEvent.ShowSnakeBar -> {
@@ -101,7 +103,9 @@ fun ProfileScreen(
                is UiEvent.Navigate -> {
                    onNavigate(ScreensNavigation.EditProfileScreen.route)
                }
-               }
+
+               UiEvent.NavigateUp -> TODO()
+           }
        }
    }
 
@@ -187,9 +191,9 @@ fun ProfileScreen(
                         translationY = (1f - toolbarState.expandedRatio) *
                                 -iconCollapsedOffsetY.toPx()
                     },
-                    topSkills = profile.topSkillsUrl,
-                    shouldShowGithub = profile.githubUrl != null,
-                    shouldShowLinkedIn = profile.linkedInUrl != null,
+                    topSkills = profile.skills,
+                    shouldShowGithub = profile.githubUrl != null && profile.githubUrl!!.isNotBlank(),
+                    shouldShowLinkedIn = profile.linkedInUrl != null && profile.linkedInUrl!!.isNotBlank(),
 
                 )
 

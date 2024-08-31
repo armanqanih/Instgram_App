@@ -100,7 +100,7 @@ dependencies {
 
     // Coil image library
     implementation("io.coil-kt:coil-compose:2.2.2")
-
+    implementation("io.coil-kt:coil-svg:2.7.0")
 
     // ImagePicker - single selector
     implementation("com.github.dhaval2404:imagepicker:2.1")

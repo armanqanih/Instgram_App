@@ -87,6 +87,8 @@ fun LoginScreen(
                         viewModel.saveLoginStatus(true)
                         onNavigate(ScreensNavigation.HomeScreen.route)
                     }
+
+                    UiEvent.NavigateUp -> TODO()
                 }
             }
         }

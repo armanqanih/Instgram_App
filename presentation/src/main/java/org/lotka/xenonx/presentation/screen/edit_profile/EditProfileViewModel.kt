@@ -63,10 +63,34 @@ class EditProfileViewModel @Inject constructor(
                 _state.value = _state.value.copy(profileImageUri = event.uri)
             }
             is EditProfileEvent.SetSkillSelected -> {
+               val result = profileUseCases.setSkillsSelected.invoke(
+                   selectedSkill = _state.value.selectedSkills,
+                   selectedToToggle = event.skill
+               )
+                viewModelScope.launch {
+                when(result){
+                    is Resource.Error -> {
+                        _eventFlow.emit(UiEvent.ShowSnakeBar(result.message ?: "Unknown error"))
+                    }
+                    is Resource.Loading -> {
+
+                    }
+                    is Resource.Success -> {
+
+                        _state.value = _state.value.copy(selectedSkills = result.data ?: run {
+                            _eventFlow.emit(UiEvent.ShowSnakeBar("Unknown error"))
+                            return@launch
+                        })
+                    }
+
+                    }
+                }
+
 
             }
             EditProfileEvent.UpdateProfile ->{
                 updateProfile()
+
             }
         }
     }
@@ -83,7 +107,7 @@ class EditProfileViewModel @Inject constructor(
                     profileImageUrl = _state.value.profile?.profileImageUrl ?: "",
                     bannerUrl = _state.value.profile?.bannerUrl ?: "",
                     bio = _state.value.bioState.text,
-                    topSkillsUrl = _state.value.selectedSkills,
+                    skills = _state.value.selectedSkills,
                     githubUrl = _state.value.githubTextState.text,
                     linkedInUrl = _state.value.linkedInTextState.text,
 
@@ -94,6 +118,9 @@ class EditProfileViewModel @Inject constructor(
                     is Resource.Success -> {
                         _state.value = _state.value.copy(isLoading = false)
                         _eventFlow.emit(UiEvent.ShowSnakeBar("Profile Updated Successfully"))
+
+                            _eventFlow.emit(UiEvent.NavigateUp)
+
                     }
                     is Resource.Error -> {
                         _state.value = _state.value.copy(isLoading = false)
@@ -127,7 +154,7 @@ class EditProfileViewModel @Inject constructor(
                             githubTextState = StandardTextFieldState(text = profile?.githubUrl ?: ""),
                             linkedInTextState = StandardTextFieldState(text = profile?.linkedInUrl ?: ""),
                             bioState = StandardTextFieldState(text = profile?.bio ?: ""),
-                            selectedSkills = profile?.topSkillsUrl ?: emptyList(),
+                            selectedSkills = profile?.skills ?: emptyList(),
                             profile = profile,
                             isLoading = false
                         )

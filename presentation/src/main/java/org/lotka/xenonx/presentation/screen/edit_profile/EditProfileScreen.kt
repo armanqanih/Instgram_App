@@ -78,7 +78,10 @@ fun  EditProfileScreen(
                 is UiEvent.Navigate -> {
                     onNavigate(event.route)
                 }
-                else -> Unit
+                is UiEvent.NavigateUp -> {
+                    onNavigateUp()
+                }
+
             }
         }
     }
@@ -155,14 +158,16 @@ fun  EditProfileScreen(
 
             BannerEditSection(
                 banner = rememberAsyncImagePainter(
-                    ImageRequest.Builder(LocalContext.current).data(data = state.profile?.bannerUrl)
+                    ImageRequest.Builder(LocalContext.current).data(
+                        data = state.profile?.bannerUrl ?:  state.profile?.bannerUrl)
                         .apply(block = fun ImageRequest.Builder.() {
                             crossfade(true)
                         }).build()
                 ),
                 profileImage = rememberAsyncImagePainter(
                     ImageRequest.Builder(LocalContext.current)
-                        .data(data = state.profile?.profileImageUrl).apply(block = fun ImageRequest.Builder.() {
+                        .data(data = state.profile?.profileImageUrl ?: state.profile?.profileImageUrl)
+                        .apply(block = fun ImageRequest.Builder.() {
                             crossfade(true)
                         }).build()
                 )
@@ -286,12 +291,12 @@ fun  EditProfileScreen(
                     crossAxisSpacing = SpaceMedium
                 ) {
 
-                  state.skills .forEach {
+                  state.skills.forEach {skill->
                        Chip(
-                           text = it.name
-                       , isSelected = it in state.selectedSkills,
+                           text = skill.name
+                       ,   isSelected = state.selectedSkills.any { it.name == skill.name },
                            onChipClick = {
-
+                               viewModel.onEvent(EditProfileEvent.SetSkillSelected(skill))
                            }
                        )
                     }

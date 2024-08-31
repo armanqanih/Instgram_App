@@ -30,7 +30,7 @@ fun StandardTextField(
     modifier: Modifier = Modifier,
     value: String = "",
     hint: String = "",
-    maxLength: Int = 40,
+    maxLength: Int = 400,
     leadingIcon: ImageVector? = null,
     error: String = "",
     maxLines: Int = 1,

@@ -1,49 +1,44 @@
 package org.lotka.xenonx.presentation.screen.profile.composable
 
-import android.graphics.drawable.Icon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import coil.ImageLoader
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
-import org.lotka.xenonx.domain.model.Skills
+import coil.decode.SvgDecoder
+import coil.request.ImageRequest
+import org.lotka.xenonx.domain.model.SkillsModel
 import org.lotka.xenonx.presentation.R
-import org.lotka.xenonx.presentation.util.Dimension.SpaceMedium
 import org.lotka.xenonx.presentation.util.Dimension.SpaceSmall
-import org.lotka.xenonx.presentation.util.Dimension.profilePictureSizeLarge
 import org.lotka.xenonx.presentation.util.toPx
 
 @Composable
 fun BannerSeaction(
     modifier: Modifier = Modifier,
     iconSize : Dp = 35.dp,
-    iconModifier: Modifier = Modifier ,
-    topSkills : List<Skills> = emptyList(),
+    iconModifier: Modifier = Modifier,
+    topSkills : List<SkillsModel> = emptyList(),
     bannerUrl : String? = null,
     shouldShowGithub : Boolean = false,
     shouldShowLinkedIn : Boolean = false,
@@ -92,18 +87,17 @@ fun BannerSeaction(
 
                 ){
 
-                topSkills.forEach {
+                topSkills.forEach { skills ->
                     Spacer(modifier = Modifier.width(SpaceSmall) )
-                    Image(painter = rememberImagePainter(
-                        data = topSkills,
-                        builder = {
-                            crossfade(true) }
-                    ),
+                    Image(painter = rememberAsyncImagePainter(ImageRequest.Builder(LocalContext.current)
+                        .data(data = skills.imageUrl)
+                        .build(), imageLoader = ImageLoader.Builder(LocalContext.current)
+                        .components {
+                            add(SvgDecoder.Factory()) }
+                        .build()),
                         contentDescription = null,
                         modifier = Modifier.height(iconSize)
                     )
-
-
 
                 }
 

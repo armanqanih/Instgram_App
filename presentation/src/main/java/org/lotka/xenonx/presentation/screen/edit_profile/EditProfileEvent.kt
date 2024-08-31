@@ -1,6 +1,7 @@
 package org.lotka.xenonx.presentation.screen.edit_profile
 
 import android.net.Uri
+import org.lotka.xenonx.domain.model.SkillsModel
 import org.lotka.xenonx.domain.util.state.StandardTextFieldState
 
 sealed class EditProfileEvent {
@@ -14,7 +15,7 @@ sealed class EditProfileEvent {
     data class CropProfilePicture(val uri : Uri) : EditProfileEvent()
     data class CropBannerImage(val uri : Uri) : EditProfileEvent()
 
-    data class SetSkillSelected(val skill : String, val selected : Boolean) : EditProfileEvent()
+    data class SetSkillSelected(val skill : SkillsModel) : EditProfileEvent()
 
 
     object UpdateProfile : EditProfileEvent()

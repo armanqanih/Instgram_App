@@ -25,7 +25,7 @@ class PostSourcePagination(
             val pageSize = params.loadSize
 
             // Fetch data from Firestore
-            val snapshot = firestore.collection("posts")
+            val snapshot = firestore.collection("PostModel")
                 .orderBy("timestamp") // Assuming posts have a timestamp field
                 .startAfter(currentPage * pageSize)
                 .limit(pageSize.toLong())

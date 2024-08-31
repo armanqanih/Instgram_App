@@ -18,7 +18,6 @@ import org.lotka.xenonx.domain.usecase.profile.ProfileUseCases
 import org.lotka.xenonx.domain.util.Resource
 import org.lotka.xenonx.presentation.util.UiEvent
 import javax.inject.Inject
-
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val profileUseCases: ProfileUseCases,
@@ -28,20 +27,19 @@ class ProfileViewModel @Inject constructor(
     private val _toolbarState = MutableStateFlow(ProfileToolbarState())
     val toolbarState = _toolbarState.asStateFlow()
 
-    private val _state = MutableStateFlow(ProfileState())
+    private val _state = MutableStateFlow(ProfileState(isLoading = true, profile = null))
     val state = _state.asStateFlow()
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-    init {
-        savedStateHandle.get<String>("userId")?.let { userId ->
-            Log.d("ProfileViewModel", "User ID received: $userId")
-            getProfile(userId)
-        }
-    }
+//    init {
+//        savedStateHandle.get<String>("userId")?.let { userId ->
+//            getProfile(userId)
+//        }
+//    }
 
-    private fun getProfile(userId: String) {
+      fun getProfile(userId: String) {
         viewModelScope.launch {
             _state.value = _state.value.copy(isLoading = true)
             profileUseCases.getProfile(userId).collect { result ->
@@ -49,8 +47,7 @@ class ProfileViewModel @Inject constructor(
                     is Resource.Success -> {
                         Log.d("ProfileViewModel", "Profile fetched successfully: ${result.data}")
                         _state.value = _state.value.copy(
-                            profile = result.data ?: UserModel("0",
-                                "armansherwanii", "", "", "", emptyList(), "", "", false, false, 0, 0, 0),
+                            profile = result.data,
                             isLoading = false
                         )
                     }
@@ -68,7 +65,6 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-
     fun setToolbarOffsetY(offset: Float) {
         _toolbarState.value = _toolbarState.value.copy(
             toolbarOffsetY = offset
@@ -81,4 +77,5 @@ class ProfileViewModel @Inject constructor(
         )
     }
 }
+
 
