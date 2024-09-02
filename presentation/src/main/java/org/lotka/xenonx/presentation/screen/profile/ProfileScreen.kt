@@ -11,10 +11,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -34,6 +37,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.coerceIn
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.rememberImagePainter
 import org.lotka.xenonx.domain.model.PostModel
 import org.lotka.xenonx.domain.model.UserModel
@@ -53,6 +57,8 @@ fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
     profilePictureSize : Dp = profilePictureSizeLarge
 ) {
+
+    val posts = viewModel.posts.collectAsLazyPagingItems()
 
     val scaffoldState = rememberScaffoldState()
 
@@ -116,6 +122,14 @@ fun ProfileScreen(
             .fillMaxSize()
             .nestedScroll(nestedScrollConnection)
     ) {
+
+        if (state.isLoading) {
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+        } else if (state.profile == null) {
+            Text("No Profile Data Found", modifier = Modifier.align(Alignment.Center))
+        }
+
+
         LazyColumn(
             state = lazyListState,
             modifier = Modifier
@@ -130,41 +144,41 @@ fun ProfileScreen(
             }
 
             item {
-                state.profile?.let { profile ->
-                    ProfileHeaderSection(
-                        user = UserModel(
-                            userId = profile.userId,
-                            profileImageUrl = profile.profileImageUrl,
-                            username = profile.username,
-                            bio = profile.bio,
-                            followerCount = profile.followerCount,
-                            followingCount = profile.followingCount,
-                            postCount = profile.postCount,
-                            isOwenProfile = profile.isOwenProfile,
-                            isFollowing = profile.isFollowing,
-                            bannerUrl = profile.bannerUrl
+                    state.profile?.let { profile ->
+                        ProfileHeaderSection(
+                            user = UserModel(
+                                userId = profile.userId,
+                                profileImageUrl = profile.profileImageUrl,
+                                username = profile.username,
+                                bio = profile.bio,
+                                followerCount = profile.followerCount,
+                                followingCount = profile.followingCount,
+                                postCount = profile.postCount,
+                                isOwenProfile = profile.isOwenProfile,
+                                isFollowing = profile.isFollowing,
+                                bannerUrl = profile.bannerUrl
 
-                        ),
-                        isOwnProfile = profile.isOwenProfile,
-                        onEditClick = {
-                            onNavigate(ScreensNavigation.EditProfileScreen.route+ "?userId=${profile.userId}")
-                        }
-                    )
-                }
+                            ),
+                            isOwnProfile = profile.isOwenProfile,
+                            onEditClick = {
+                                onNavigate(ScreensNavigation.EditProfileScreen.route + "?userId=${profile.userId}")
+                            }
+                        )
+                    }
 
             }
 
-            items(20) {
-                PostItem(
-                    postModel = PostModel(
-                        id = 1,
-                        userName = "Arman Sherwamii",
-                        profileImage = "",
-                        postImage = "",
-                        description = "ahahaha",
-                        likes = 17,
-                        comments = 7,
-                    ),
+            items(posts.itemSnapshotList) { post ->
+                        PostItem(
+                        postModel = PostModel(
+                        id = post?.id ?: 0,
+                        userName = post?.userName ?: "",
+                        profileImage = post?.profileImage ?: "",
+                        postImage = post?.postImage ?: "",
+                        description = post?.description ?: "",
+                        likes = post?.likes ?: 0,
+                        comments = post?.comments ?: 0,
+                        ),
                     showProfileImage = false,
                     onPostClick = {
                         onNavigate(ScreensNavigation.PostDetailScreen.route)

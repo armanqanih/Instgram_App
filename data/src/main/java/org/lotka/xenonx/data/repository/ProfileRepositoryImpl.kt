@@ -1,6 +1,9 @@
 package org.lotka.xenonx.data.repository
 
 import android.net.Uri
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
@@ -9,6 +12,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import org.lotka.xenonx.data.paging.PostSourcePagination
+import org.lotka.xenonx.domain.model.PostModel
 
 import org.lotka.xenonx.domain.model.SkillsModel
 import org.lotka.xenonx.domain.model.UserModel
@@ -19,51 +24,63 @@ import javax.inject.Inject
 class ProfileRepositoryImpl @Inject constructor(
     private val firestore: FirebaseFirestore,
 ): ProfileRepository {
-    override suspend fun getProfile(userId: String): Flow<Resource<UserModel>> {
-        return flow {
-                  withContext(Dispatchers.IO) {
-                    emit(Resource.Loading()) // Emit loading state
-                    try {
-                        val document =
-                            firestore.collection("UserModel").document(userId).get().await()
-                        if (document.exists()) {
-                            val data = document.data
-                            if (data != null) {
-                                val skills = (data["skills"] as? List<Map<String, Any>>)?.map {
-                                    SkillsModel(
-                                        name = it["name"] as? String ?: "",
-                                        imageUrl = it["imageUrl"] as? String ?: ""
-                                    )
-                                } ?: emptyList()
+    override fun getPostsPage(userId: String): Flow<PagingData<PostModel>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 20, // Adjust the page size
+                enablePlaceholders = false
+            )
+            ,
+            pagingSourceFactory = {
+                PostSourcePagination(firestore,
+                PostSourcePagination.Source.Profile(userId))
+            }
+        ).flow
+    }
 
-                                val profileResponse = UserModel(
-                                    userId = data["userId"] as String? ?: "1",
-                                    username = data["username"] as? String ?: "",
-                                    profileImageUrl = data["profileImageUrl"] as? String ?: "",
-                                    bannerUrl = data["bannerUrl"] as? String ?: "",
-                                    bio = data["bio"] as? String ?: "",
-                                    skills = skills,
-                                    githubUrl = data["githubUrl"] as? String,
-                                    linkedInUrl = data["linkedInUrl"] as? String,
-                                    isOwenProfile = data["isOwenProfile"] as? Boolean ?: false,
-                                    isFollowing = data["isFollowing"] as? Boolean ?: false,
-                                    followingCount = (data["followingCount"] as? Long)?.toInt()
-                                        ?: 0,
-                                    followerCount = (data["followerCount"] as? Long)?.toInt() ?: 0,
-                                    postCount = (data["postCount"] as? Long)?.toInt() ?: 0
-                                )
-                                emit(Resource.Success(profileResponse))
-                            }
+    override suspend fun getProfile(userId: String): Flow<Resource<UserModel>> = flow {
 
-                        } else {
-                            emit(Resource.Error("Profile not found"))
-                        }
-                    } catch (e: Exception) {
-                        emit(Resource.Error("Error fetching profile: ${e.message}"))
-                    }
-                }
+        try {
+            // Perform Firestore operation on IO Dispatcher
+            val document = withContext(Dispatchers.IO) {
+                firestore.collection("UserModel").document(userId).get().await()
+            }
+
+            if (document.exists()) {
+                document.data?.let { data ->
+                    val skills = (data["skills"] as? List<Map<String, Any>>)?.map { skill ->
+                        SkillsModel(
+                            name = skill["name"] as? String ?: "",
+                            imageUrl = skill["imageUrl"] as? String ?: ""
+                        )
+                    } ?: emptyList()
+
+                    val profileResponse = UserModel(
+                        userId = data["userId"] as? String ?: "",
+                        username = data["username"] as? String ?: "",
+                        profileImageUrl = data["profileImageUrl"] as? String ?: "",
+                        bannerUrl = data["bannerUrl"] as? String ?: "",
+                        bio = data["bio"] as? String ?: "",
+                        skills = skills,
+                        githubUrl = data["githubUrl"] as? String,
+                        linkedInUrl = data["linkedInUrl"] as? String,
+                        isOwenProfile = data["isOwenProfile"] as? Boolean ?: false,
+                        isFollowing = data["isFollowing"] as? Boolean ?: false,
+                        followingCount = (data["followingCount"] as? Long)?.toInt() ?: 0,
+                        followerCount = (data["followerCount"] as? Long)?.toInt() ?: 0,
+                        postCount = (data["postCount"] as? Long)?.toInt() ?: 0
+                    )
+                    emit(Resource.Success(profileResponse))
+                } ?: emit(Resource.Error("Profile data is null"))
+            } else {
+                emit(Resource.Error("Profile not found"))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error("Error fetching profile: ${e.message}"))
         }
     }
+
+
 
 
     override suspend fun getSkills(): Flow<Resource<List<SkillsModel>>> {

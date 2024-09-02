@@ -7,6 +7,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.lotka.xenonx.data.repository.ProfileRepositoryImpl
 import org.lotka.xenonx.domain.repository.profile.ProfileRepository
+import org.lotka.xenonx.domain.usecase.profile.GetPostsForProfileUseCase
 import org.lotka.xenonx.domain.usecase.profile.GetProfileUseCase
 import org.lotka.xenonx.domain.usecase.profile.GetSkillsUseCase
 import org.lotka.xenonx.domain.usecase.profile.ProfileUseCases
@@ -37,7 +38,8 @@ object ProfileModule {
             getProfile = GetProfileUseCase(profileRepository),
             getSkills = GetSkillsUseCase(profileRepository),
             updateProfile = UpdateProfileUseCase(profileRepository),
-            setSkillsSelected = SetSkillsSelectedUseCase()
+            setSkillsSelected = SetSkillsSelectedUseCase(),
+            getPostsForProfile = GetPostsForProfileUseCase(profileRepository)
         )
     }
 

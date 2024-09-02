@@ -69,6 +69,8 @@ fun RegisterScreen(
                 is UiEvent.Navigate -> {
                     onNavigate(event.route)
                 }
+
+                UiEvent.NavigateUp -> TODO()
             }
         }
     }

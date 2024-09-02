@@ -40,7 +40,7 @@ class PostViewModel @Inject constructor(
                 )
             }
 
-            else -> {}
+
         }
     }
 

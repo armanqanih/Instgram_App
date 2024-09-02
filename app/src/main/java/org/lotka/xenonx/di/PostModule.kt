@@ -30,18 +30,21 @@ object PostModule {
 
     @Provides
     @Singleton
-    fun providePostSourcePagination(firestore: FirebaseFirestore): PostSourcePagination {
-        return PostSourcePagination(firestore)
+    fun providePostSourcePagination(
+        firestore: FirebaseFirestore,
+        paginationFollower: PostSourcePagination.Source.Follows
+    ): PostSourcePagination {
+        return PostSourcePagination(firestore,paginationFollower )
     }
 
     @Provides
     @Singleton
     fun providePostRepository(
-        pagination: PostSourcePagination,
         firestore: FirebaseFirestore,
-        firebaseStorage: FirebaseStorage
+        firebaseStorage: FirebaseStorage,
 
-    ): PostRepository = PostRepositoryImpl(pagination,firestore,firebaseStorage)
+
+    ): PostRepository = PostRepositoryImpl(firestore,firebaseStorage,)
 
     @Provides
     @Singleton

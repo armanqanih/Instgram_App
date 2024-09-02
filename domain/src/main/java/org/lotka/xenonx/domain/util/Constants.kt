@@ -14,6 +14,7 @@ object Constants {
 
 
     const val JWT_TOKEN = "JWT_TOKEN"
+    const val KEY_USERID = "userId"
 
     const val POSTS_PATH = "posts"
 

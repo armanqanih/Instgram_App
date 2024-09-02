@@ -24,7 +24,6 @@ import java.util.UUID
 import javax.inject.Inject
 
 class PostRepositoryImpl @Inject constructor(
-    private val pagination: PostSourcePagination,
     private val firestore: FirebaseFirestore,
     private val firebaseStorage: FirebaseStorage,
 
@@ -35,7 +34,7 @@ class PostRepositoryImpl @Inject constructor(
                 pageSize = 20, // Adjust the page size
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = { pagination }
+            pagingSourceFactory = {PostSourcePagination(firestore, PostSourcePagination.Source.Follows)}
         ).flow
     }
 

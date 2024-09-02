@@ -244,7 +244,10 @@ dependencies {
     implementation ("com.google.firebase:firebase-auth-ktx:23.0.0")
     implementation ("com.google.firebase:firebase-firestore:25.0.0")
     implementation ("com.google.firebase:firebase-common:21.0.0")
-
+    implementation (platform("com.google.firebase:firebase-bom:32.0.0"))
+    implementation ("com.google.firebase:firebase-firestore")
+    implementation ("com.google.firebase:firebase-analytics")
+    implementation ("com.google.firebase:firebase-messaging")
     implementation ("com.google.firebase:firebase-analytics-ktx:22.0.2")
     implementation ("com.google.firebase:firebase-analytics:22.0.2")
 

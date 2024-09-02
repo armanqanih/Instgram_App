@@ -30,6 +30,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
 import org.lotka.xenonx.domain.model.PostModel
 import org.lotka.xenonx.domain.util.Constants.MAX_DESCRIPTION_LINE
 import org.lotka.xenonx.presentation.R
@@ -65,7 +68,13 @@ fun PostItem(
 
         ) {
             Image(
-                painter = painterResource(id = R.drawable.post),
+                painter = rememberAsyncImagePainter(
+                       ImageRequest.Builder(LocalContext.current)
+                           .data(data = postModel.postImage)
+                            .apply(block = fun ImageRequest.Builder.() {
+                            crossfade(true)
+                        }).build()
+                ),
                 contentDescription = "profile image",
                 modifier = Modifier
                     .fillMaxWidth()
@@ -76,7 +85,7 @@ fun PostItem(
             )
             Column(modifier = Modifier
                 .fillMaxWidth()
-               .padding(SpaceSmall)
+                .padding(SpaceSmall)
             ) {
                 ActionRow(
                      modifier = Modifier.fillMaxWidth(),
@@ -139,7 +148,13 @@ fun PostItem(
         }
    if (showProfileImage){
        Image(
-           painter = painterResource(id = R.drawable.arman),
+           painter = rememberAsyncImagePainter(
+                       ImageRequest.Builder(LocalContext.current)
+                       .data(data = postModel.profileImage)
+                       .apply(block = fun ImageRequest.Builder.() {
+                        crossfade(true)
+                       }).build()
+           ),
            contentDescription = "profile image",
            modifier = Modifier
                .size(profilePictureSizeMedium)
