@@ -1,6 +1,7 @@
 package org.lotka.xenonx.presentation.screen.login
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -41,6 +42,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import org.lotka.xenonx.domain.util.Constants.MIN_PASSWORD_LENGTH
 import org.lotka.xenonx.domain.util.error.AuthError
@@ -200,29 +204,45 @@ fun LoginScreen(
                         .padding(SpaceMedium)
                     )
                 }
+                Spacer(modifier = Modifier.height(SpaceLarge))
 
-//
+
 
             }
+            val annotatedText = buildAnnotatedString {
+                withStyle(
+                    style = SpanStyle(
+                        color = Color.White,
 
-            val signUpText = buildAnnotatedString {
-                append(stringResource(R.string.dont_have_an_account))
-                append(" ")
-                withStyle(style = SpanStyle(MaterialTheme.colors.primary)) {
-                    append(stringResource(R.string.signup))
+                        )
+                ) {
+                    append("Don't you have an account? ")
                 }
+                pushStringAnnotation(tag = "REGISTER", annotation = "register")
+                withStyle(
+                    style = SpanStyle(
+                        color = MaterialTheme.colors.primary, // optional, for underlining the text
+                    )
+                ) {
+                    append("Register")
+                }
+                pop()
             }
 
             ClickableText(
-                text = signUpText,
+                text = annotatedText,
+                onClick = { offset ->
+                    annotatedText.getStringAnnotations(tag = "REGISTER", start = offset, end = offset)
+                        .firstOrNull()?.let {
+                            onNavigate(ScreensNavigation.RegisterScreen.route)
+                        }
+                },
                 style = MaterialTheme.typography.body1,
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = SpaceMedium),
-                onClick = {
-                    onNavigate(ScreensNavigation.RegisterScreen.route)
-                }
+                modifier = Modifier.align(Alignment.BottomCenter)
             )
+
+
+
         }
     }
 }

@@ -31,8 +31,9 @@ class ProfileViewModel @Inject constructor(
     private val _toolbarState = MutableStateFlow(ProfileToolbarState())
     val toolbarState = _toolbarState.asStateFlow()
 
-    private val _state = MutableStateFlow(ProfileState(isLoading = true, profile = null))
+    private val _state = MutableStateFlow(ProfileState())
     val state = _state.asStateFlow()
+
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
@@ -43,11 +44,9 @@ class ProfileViewModel @Inject constructor(
 
     ).cachedIn(viewModelScope)
 
-
-
     fun getProfile(userId: String?) {
         viewModelScope.launch {
-            _state.value = _state.value.copy(isLoading = true) // Start loading
+//            _state.value = _state.value.copy(isLoading = true) // Start loading
              profileUseCases.getProfile(userId?:getOwnUserId()
              ).collect { result ->
                 when (result) {

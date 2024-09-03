@@ -60,6 +60,7 @@ fun ProfileScreen(
 
     val posts = viewModel.posts.collectAsLazyPagingItems()
 
+
     val scaffoldState = rememberScaffoldState()
 
     var toolbarState = viewModel.toolbarState.collectAsState().value
@@ -149,7 +150,7 @@ fun ProfileScreen(
                             user = UserModel(
                                 userId = profile.userId,
                                 profileImageUrl = profile.profileImageUrl,
-                                username = profile.username,
+                                username = profile.username?:"arman sherwanii",
                                 bio = profile.bio,
                                 followerCount = profile.followerCount,
                                 followingCount = profile.followingCount,

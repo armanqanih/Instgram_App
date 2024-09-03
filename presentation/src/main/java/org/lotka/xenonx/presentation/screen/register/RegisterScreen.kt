@@ -32,6 +32,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextDecoration
 import org.lotka.xenonx.domain.util.Constants.MIN_PASSWORD_LENGTH
 import org.lotka.xenonx.domain.util.Constants.MIN_USERNAME_LENGTH
 import org.lotka.xenonx.domain.util.error.AuthError
@@ -218,22 +219,35 @@ fun RegisterScreen(
 
             val signUpText = buildAnnotatedString {
                 append(stringResource(R.string.already_have_an_account))
-                append("")
-                withStyle(style = SpanStyle(MaterialTheme.colors.primary)) {
+                append(" ")
+
+                pushStringAnnotation(tag = "LOGIN", annotation = "Login")
+                withStyle(
+                    style = SpanStyle(
+                        color = MaterialTheme.colors.primary,
+                        textDecoration = TextDecoration.Underline // optional for underlining
+                    )
+                ) {
                     append(stringResource(R.string.Login))
                 }
+                pop()
             }
 
-            ClickableText(
-                text = signUpText,
-                style = MaterialTheme.typography.body1,
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = SpaceMedium),
-                onClick = {
-                   onNavigate(ScreensNavigation.LoginScreen.route)
-                }
-            )
+            Box(modifier = Modifier.fillMaxSize()) {
+                ClickableText(
+                    text = signUpText,
+                    style = MaterialTheme.typography.body1,
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 16.dp), // replace `SpaceMedium` with actual value like 16.dp
+                    onClick = { offset ->
+                        signUpText.getStringAnnotations(tag = "LOGIN", start = offset, end = offset)
+                            .firstOrNull()?.let {
+                                onNavigate(ScreensNavigation.LoginScreen.route)
+                            }
+                    }
+                )
+            }
         }
     }
 }
